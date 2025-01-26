@@ -15,7 +15,6 @@ local lp = game.Players.LocalPlayer
 local char = lp.Character or lp.CharacterAdded:Wait()
 local hrp = char:WaitForChild("HumanoidRootPart")
 
--- Update hrp when character respawns
 lp.CharacterAdded:Connect(function(newChar)
     char = newChar
     hrp = newChar:WaitForChild("HumanoidRootPart")
@@ -37,7 +36,7 @@ local function drawESP(plantModel)
     end
     
     local label = Drawing.new("Text")
-    label.Text = "Hemp"
+    label.Text = "Cloth"
     label.Size = 13
     label.Font = 2
     label.Color = getgenv().HempColour
@@ -63,10 +62,10 @@ game:GetService("RunService").RenderStepped:Connect(function()
         if onScreen then
             local label = plantCache[plant]
             label.Position = Vector2.new(screenPos.X, screenPos.Y)
-            label.Text = "Hemp"
+            label.Text = "Cloth"
             label.Visible = getgenv().HempESP
             label.Position = Vector2.new(screenPos.X, screenPos.Y + 15)
-            label.Text = string.format("Hemp\n%.0fm", distance)
+            label.Text = string.format("Cloth\n%.0fm", distance)
         else
             local label = plantCache[plant]
             if label then
