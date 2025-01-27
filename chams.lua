@@ -3,6 +3,7 @@ task.spawn(function()
     local camera = workspace.CurrentCamera
     local highlights = {}
     getgenv().Chams = getgenv().Chams or false
+    getgenv().ChamsColour = getgenv().ChamsColour or Color3.new(1, 1, 1)
     local function is_within_range(player)
         if not lplr.Character or not player.Character then return false end
         local localRoot = lplr.Character:FindFirstChild("HumanoidRootPart")
@@ -17,7 +18,8 @@ task.spawn(function()
         highlight.Adornee = character
         highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
         highlight.FillTransparency = 0.1
-        highlight.OutlineTransparency = 1
+        highlight.OutlineTransparency = 0
+        highlight.OutlineColor = Color3.new(0, 0, 0)
         highlights[character] = highlight
     end
     local function destroy_highlight(character)
@@ -49,16 +51,7 @@ task.spawn(function()
     end
     game.Players.PlayerAdded:Connect(on_player_added)
     game.Players.PlayerRemoving:Connect(on_player_removing)
-    local time = 0
-    local function get_player_color(player, t)
-        local players = game.Players:GetPlayers()
-        local index = table.find(players, player) or 1
-        local hueOffset = (index / #players) % 1
-        local hue = (t + hueOffset) % 1
-        return Color3.fromHSV(hue, 1, 1)
-    end
-    game:GetService("RunService").RenderStepped:Connect(function(deltaTime)
-        time = time + deltaTime * 0.5
+    game:GetService("RunService").RenderStepped:Connect(function()
         if getgenv().Chams then
             for _, player in ipairs(game.Players:GetPlayers()) do
                 if player == lplr then continue end
@@ -72,7 +65,7 @@ task.spawn(function()
                         highlight = highlights[character]
                     end
                     if highlight then
-                        highlight.FillColor = get_player_color(player, time)
+                        highlight.FillColor = getgenv().ChamsColour
                     end
                 else
                     destroy_highlight(character)
