@@ -3072,7 +3072,6 @@ function library:Load(options)
                     Font = Drawing.Fonts.Plex,
                     Size = 13,
                     Position = UDim2.new(0, 0, 0, 0),
-                    Colour = color3.fromRGB(217, 196, 121)
                     Theme = "Text",
                     ZIndex = 7,
                     Outline = true,
