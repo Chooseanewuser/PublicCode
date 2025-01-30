@@ -1,3 +1,4 @@
+--> Start thread
 task.spawn(function()
 local dwEntities = cloneref(game:GetService("Players"))
 local RunService = cloneref(game:GetService("RunService"))
@@ -182,7 +183,7 @@ for i, v in pairs(game.Players:GetChildren()) do
                         v.Character.Humanoid.Health > 0 and
                         v.Character:FindFirstChild("Head")
                  then
-                    workspace.CurrentCamera.FieldOfView = getgenv().fieldofview or 90
+                    workspace.CurrentCamera.FieldOfView = getgenv().fieldofview or 80
                     local rootpart = v.Character.HumanoidRootPart
                     local root_pos, RootVis = dwcamera:WorldToViewportPoint(rootpart.Position)
 
@@ -451,7 +452,7 @@ dwEntities.PlayerAdded:Connect(function(v)
                         v.Character.Humanoid.Health > 0 and
                         v.Character:FindFirstChild("Head")
                  then
-                    workspace.CurrentCamera.FieldOfView = getgenv().fieldofview or 90
+                    workspace.CurrentCamera.FieldOfView = getgenv().fieldofview or 80
                     local rootpart = v.Character.HumanoidRootPart
                     local root_pos, RootVis = dwcamera:WorldToViewportPoint(rootpart.Position)
 
@@ -619,4 +620,6 @@ dwEntities.PlayerAdded:Connect(function(v)
     end
     coroutine.wrap(boxesp)()
 end)
+
+--> End thread
 end)
