@@ -1,4 +1,4 @@
---> Start thread
+task.spawn(function()
 local dwEntities = cloneref(game:GetService("Players"))
 local RunService = cloneref(game:GetService("RunService"))
 local dwEntity = cloneref(game.Players.LocalPlayer)
@@ -47,19 +47,16 @@ local function isvisible(player)
     if not localChar or not targetChar then
         return false
     end
-
     local startPos = localChar:WaitForChild("Head").Position
     local endPos = targetChar:WaitForChild("Head").Position
     local direction = endPos - startPos
-
     local ray = Ray.new(startPos, direction)
     local hitPart = workspace:FindPartOnRay(ray, localChar)
-
     return hitPart == nil or hitPart:IsDescendantOf(targetChar)
 end
 
 local function isstaff(player)
-    return player == game.Players.LocalPlayer
+    return false
 end
 
 for i, v in pairs(game.Players:GetChildren()) do 
@@ -185,6 +182,7 @@ for i, v in pairs(game.Players:GetChildren()) do
                         v.Character.Humanoid.Health > 0 and
                         v.Character:FindFirstChild("Head")
                  then
+                    workspace.CurrentCamera.FieldOfView = getgenv().fieldofview or 90
                     local rootpart = v.Character.HumanoidRootPart
                     local root_pos, RootVis = dwcamera:WorldToViewportPoint(rootpart.Position)
 
@@ -453,6 +451,7 @@ dwEntities.PlayerAdded:Connect(function(v)
                         v.Character.Humanoid.Health > 0 and
                         v.Character:FindFirstChild("Head")
                  then
+                    workspace.CurrentCamera.FieldOfView = getgenv().fieldofview or 90
                     local rootpart = v.Character.HumanoidRootPart
                     local root_pos, RootVis = dwcamera:WorldToViewportPoint(rootpart.Position)
 
@@ -619,4 +618,5 @@ dwEntities.PlayerAdded:Connect(function(v)
         )
     end
     coroutine.wrap(boxesp)()
+end)
 end)
