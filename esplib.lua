@@ -207,7 +207,7 @@ get("player").update = function(self, character, data)
 			drawings.boxOutline.ZIndex = drawings.box.ZIndex - 1
 			drawings.boxFilled.ZIndex = drawings.boxOutline.ZIndex - 1
 
-			drawings.name.Text = `[ {player.Name} ]`
+			drawings.name.Text = `{player.Name}`
 			drawings.name.Size = math.max(math.min(math.abs(12.5 * scale), 12.5), 10)
 			drawings.name.Position = Vector2.new(x, (yPostion - drawings.name.TextBounds.Y) - 2)
 			drawings.name.Color = color(visuals.names.color)
