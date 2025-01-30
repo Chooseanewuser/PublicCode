@@ -237,14 +237,14 @@ get("player").update = function(self, character, data)
 
 			drawings.distance.Text = `{math.floor(data.distance)}`
 			drawings.distance.Size = math.max(math.min(math.abs(11 * scale), 11), 10)
-			drawings.distance.Position = Vector2.new(x, (yPostion + height) + (drawings.distance.TextBounds.Y * 0.25))
+			drawings.weapon.Position = Vector2.new(x, (yPostion + height) + (drawings.weapon.TextBounds.Y * 0.25))
 			drawings.distance.Color = color(visuals.distance.color)
 			drawings.distance.Outline = visuals.distance.outline.enabled
 			drawings.distance.OutlineColor = visuals.distance.outline.color
 			
 			drawings.weapon.Text = `{weapon}`
 			drawings.weapon.Size = math.max(math.min(math.abs(11 * scale), 11), 10)
-			drawings.weapon.Position = visuals.distance.enabled and Vector2.new(drawings.distance.Position.x, drawings.distance.Position.Y + (drawings.weapon.TextBounds.Y * 0.75)) or drawings.distance.Position
+			drawings.distance.Position = visuals.weapon.enabled and Vector2.new(drawings.weapon.Position.x, drawings.weapon.Position.Y + (drawings.distance.TextBounds.Y * 0.75)) or drawings.weapon.Position
 			drawings.weapon.Color = color(visuals.weapon.color)
 			drawings.weapon.Outline = visuals.weapon.outline.enabled
 			drawings.weapon.OutlineColor = visuals.weapon.outline.color
