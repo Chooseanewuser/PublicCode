@@ -102,6 +102,7 @@ local function rem(skele)
 end
 
 rs.RenderStepped:Connect(function()
+    workspace.CurrentCamera.FieldOfView = getgenv().fieldofview or 90
     if not getgenv().Skeleton then
         for _, player in ipairs(players:GetPlayers()) do
             if skeles[player] then
