@@ -1,4 +1,3 @@
---> Start thread
 task.spawn(function()
 local dwEntities = cloneref(game:GetService("Players"))
 local RunService = cloneref(game:GetService("RunService"))
@@ -620,6 +619,4 @@ dwEntities.PlayerAdded:Connect(function(v)
     end
     coroutine.wrap(boxesp)()
 end)
-
---> End thread
 end)
