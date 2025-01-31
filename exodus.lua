@@ -677,7 +677,7 @@ local newInfo = TweenInfo.new
 local newColor3, fromHex, fromHSV = Color3.new, Color3.fromHex, Color3.fromHSV
 local decode = (syn and syn.crypt.base64.decode) or (crypt and crypt.base64decode) or base64_decode
 local unpack, clear, clone, find, concat = table.unpack, table.clear, table.clone, table.find, table.concat
-local request = syn and syn.request or request
+local request = request
 local inset = services.GuiService:GetGuiInset().Y
 local wait = task.wait
 
@@ -3851,8 +3851,8 @@ function library:Playerlist(max_players)
             player_data[plr].name = plr.Name
 
             spawn(function()
-                local thumbnail_data = services.HttpService:JSONDecode(syn.request{Url = ("https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=%s&size=60x60&format=Png"):format(plr.UserId), Method = "GET"}.Body)
-                local image = syn.request{Url = thumbnail_data.data[1].imageUrl, Method = "GET"}.Body
+                local thumbnail_data = services.HttpService:JSONDecode(request{Url = ("https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=%s&size=60x60&format=Png"):format(plr.UserId), Method = "GET"}.Body)
+                local image = request{Url = thumbnail_data.data[1].imageUrl, Method = "GET"}.Body
 
                 player_data[plr].image = image
                 
@@ -3895,7 +3895,6 @@ function library:Playerlist(max_players)
 
             player_data[plr] = {tags = {}, tag_size = bounds + 32, name = plr.Name, bar = bar}
 
-            -- parent after cuz my extension is goofy like that
             bar.Parent = holder
 
             update()
@@ -3913,7 +3912,6 @@ function library:Playerlist(max_players)
         player_data[plr].bar:Destroy()
         player_data[plr] = nil
 
-        --update the list cuz it doesnt update itself for some reason
         holder.Position = holder.Position
         update()
     end
