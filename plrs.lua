@@ -1,4 +1,3 @@
---> Start thread
 task.spawn(function()
 local dwEntities = cloneref(game:GetService("Players"))
 local RunService = cloneref(game:GetService("RunService"))
@@ -186,9 +185,9 @@ for i, v in pairs(game.Players:GetChildren()) do
                     workspace.CurrentCamera.FieldOfView = getgenv().fieldofview or 80
                     local rootpart = v.Character.HumanoidRootPart
                     local root_pos, RootVis = dwcamera:WorldToViewportPoint(rootpart.Position)
-
+                    local fov = workspace.CurrentCamera.FieldOfView
                     local distance = (dwcamera.CFrame.Position - rootpart.Position).Magnitude
-                    local scale = 1 / distance * 1000
+                    local scale = (1 / distance) * (70 / fov) * 1000
 
                     if RootVis then
                         -------------------------------------------------------------------------------------------------------------// BOX & OUTLINE \\-------------------------------------------------------------------------------------------------------------
@@ -455,9 +454,9 @@ dwEntities.PlayerAdded:Connect(function(v)
                     workspace.CurrentCamera.FieldOfView = getgenv().fieldofview or 80
                     local rootpart = v.Character.HumanoidRootPart
                     local root_pos, RootVis = dwcamera:WorldToViewportPoint(rootpart.Position)
-
+                    local fov = workspace.CurrentCamera.FieldOfView
                     local distance = (dwcamera.CFrame.Position - rootpart.Position).Magnitude
-                    local scale = 1 / distance * 1000
+                    local scale = (1 / distance) * (70 / fov) * 1000
 
                     if RootVis then
                         -------------------------------------------------------------------------------------------------------------// BOX & OUTLINE \\-------------------------------------------------------------------------------------------------------------
@@ -620,6 +619,4 @@ dwEntities.PlayerAdded:Connect(function(v)
     end
     coroutine.wrap(boxesp)()
 end)
-
---> End thread
 end)
