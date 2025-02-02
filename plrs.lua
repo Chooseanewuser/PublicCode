@@ -237,9 +237,13 @@ for i, v in pairs(game.Players:GetChildren()) do
                         -------------------------------------------------------------------------------------------------------------// DISTANCE \\-------------------------------------------------------------------------------------------------------------
 
                         local distance = getDist(dwEntity.Character, v)
-
                         Distance.Position = Vector2.new(Weapon.Position.X, Weapon.Position.Y + 15)
-                        Distance.Text = "  " .. tostring(math.round(distance)) .. "  "
+                        if distance then
+                            Distance.Position = Vector2.new(Weapon.Position.X, Weapon.Position.Y + 15)
+                            Distance.Text = " " .. tostring(math.round(distance)) .. " "
+                        else
+                            Distance.Text = " "
+                        end
                         Distance.Visible = getgenv().Distance
                         Distance.Color = getgenv().Distance_Color
 
@@ -272,7 +276,12 @@ for i, v in pairs(game.Players:GetChildren()) do
                         -------------------------------------------------------------------------------------------------------------// HEALTH TEXT \\-------------------------------------------------------------------------------------------------------------
 
                         Health.Position = Vector2.new(healthBar.Position.X - 10, healthBar.Position.Y)
-                        Health.Text = " " .. tostring(math.round(healthVal)) .. " "
+                        if healthVal then
+                            Health.Position = Vector2.new(healthBar.Position.X - 10, healthBar.Position.Y)
+                            Health.Text = " " .. tostring(math.round(healthVal)) .. " "
+                        else
+                            Health.Text = " "
+                        end
                         Health.Visible = getgenv().Health
                         Health.Color = currentColor
 
@@ -508,7 +517,16 @@ dwEntities.PlayerAdded:Connect(function(v)
                         local distance = getDist(dwEntity.Character, v)
 
                         Distance.Position = Vector2.new(Weapon.Position.X, Weapon.Position.Y + 15)
-                        Distance.Text = "  " .. tostring(math.round(distance)) .. " "
+                        local distance = getDist(dwEntity.Character, v)
+                        Distance.Position = Vector2.new(Weapon.Position.X, Weapon.Position.Y + 15)
+                        if distance then
+                            Distance.Position = Vector2.new(Weapon.Position.X, Weapon.Position.Y + 15)
+                            Distance.Text = " " .. tostring(math.round(distance)) .. " "
+                        else
+                            Distance.Text = " "
+                        end
+                        Distance.Visible = getgenv().Distance
+                        Distance.Color = getgenv().Distance_Color
                         Distance.Visible = getgenv().Distance
                         Distance.Color = getgenv().Distance_Color
 
@@ -541,7 +559,12 @@ dwEntities.PlayerAdded:Connect(function(v)
                         -------------------------------------------------------------------------------------------------------------// HEALTH TEXT \\-------------------------------------------------------------------------------------------------------------
 
                         Health.Position = Vector2.new(healthBar.Position.X - 10, healthBar.Position.Y)
-                        Health.Text = " " .. tostring(math.round(healthVal)) .. " "
+                        if healthVal then
+                            Health.Position = Vector2.new(healthBar.Position.X - 10, healthBar.Position.Y)
+                            Health.Text = " " .. tostring(math.round(healthVal)) .. " "
+                        else
+                            Health.Text = " "
+                        end
                         Health.Visible = getgenv().Health
                         Health.Color = currentColor
 
