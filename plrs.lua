@@ -239,7 +239,6 @@ for i, v in pairs(game.Players:GetChildren()) do
                         local distance = getDist(dwEntity.Character, v)
                         Distance.Position = Vector2.new(Weapon.Position.X, Weapon.Position.Y + 15)
                         if distance then
-                            Distance.Position = Vector2.new(Weapon.Position.X, Weapon.Position.Y + 15)
                             Distance.Text = " " .. tostring(math.round(distance)) .. " "
                         else
                             Distance.Text = " "
@@ -277,7 +276,6 @@ for i, v in pairs(game.Players:GetChildren()) do
 
                         Health.Position = Vector2.new(healthBar.Position.X - 10, healthBar.Position.Y)
                         if healthVal then
-                            Health.Position = Vector2.new(healthBar.Position.X - 10, healthBar.Position.Y)
                             Health.Text = " " .. tostring(math.round(healthVal)) .. " "
                         else
                             Health.Text = " "
@@ -520,7 +518,6 @@ dwEntities.PlayerAdded:Connect(function(v)
                         local distance = getDist(dwEntity.Character, v)
                         Distance.Position = Vector2.new(Weapon.Position.X, Weapon.Position.Y + 15)
                         if distance then
-                            Distance.Position = Vector2.new(Weapon.Position.X, Weapon.Position.Y + 15)
                             Distance.Text = " " .. tostring(math.round(distance)) .. " "
                         else
                             Distance.Text = " "
@@ -560,7 +557,6 @@ dwEntities.PlayerAdded:Connect(function(v)
 
                         Health.Position = Vector2.new(healthBar.Position.X - 10, healthBar.Position.Y)
                         if healthVal then
-                            Health.Position = Vector2.new(healthBar.Position.X - 10, healthBar.Position.Y)
                             Health.Text = " " .. tostring(math.round(healthVal)) .. " "
                         else
                             Health.Text = " "
