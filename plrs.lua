@@ -36,8 +36,14 @@ function getchartool(Character)
 end
 
 function getDist(Character, v)
-    local dist = (Character.HumanoidRootPart.Position - v.Character.HumanoidRootPart.Position).Magnitude
-    return dist
+    local success, dist = pcall(function()
+        return (Character.HumanoidRootPart.Position - v.Character.HumanoidRootPart.Position).Magnitude
+    end)
+    if success then
+        return dist
+    else
+        return nil
+    end
 end
 
 local function isvisible(player)
