@@ -2,7 +2,7 @@ task.spawn(function()
     local lplr = game.Players.LocalPlayer
     local camera = workspace.CurrentCamera
     local highlights = {}
-    getgenv().Chams = getgenv().Chams or true
+    getgenv().Chams = getgenv().Chams or false
     local nodes = workspace:FindFirstChild("Nodes")
     local trees = workspace:FindFirstChild("Trees")
     local vfx = workspace:FindFirstChild("VFX")
