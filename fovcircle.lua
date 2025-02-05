@@ -16,7 +16,7 @@ task.spawn(function()
             if not circle then
                 circle = Drawing.new("Circle")
                 circle.Color = getgenv().FOVcolour
-                circle.Thickness = 3
+                circle.Thickness = 1
                 circle.NumSides = 50
                 circle.Filled = false
                 circle.Transparency = 1
