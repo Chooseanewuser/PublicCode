@@ -1,4 +1,3 @@
--- [ FOV CIRCLE ]
 task.spawn(function()
     getgenv().FOVtoggle = getgenv().FOVtoggle or false
     getgenv().FOVsize = getgenv().FOVsize or 100
