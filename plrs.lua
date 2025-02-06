@@ -211,91 +211,165 @@ function addplr(plr)
         healthText = cloneref(Instance.new("TextLabel")),
         distanceText = cloneref(Instance.new("TextLabel")),
     }
-    local plrHoldster = connections[plr].plrHoldster    plrHoldster.Name = plr.Name    plrHoldster.Parent = coreGui.Holder    plrHoldster.Visible = false    plrHoldster.Position = UDim2.new(0, 0.5, 0, 0.5)    plrHoldster.Size = UDim2.new(0, 0.5, 0, 0.5)
-    local NameEsp = connections[plr].NameEsp    NameEsp.FontFace = Library.Fonts.Types.ProggyTiny   NameEsp.Visible = false     NameEsp.Parent = plrHoldster    NameEsp.Size = UDim2.new(0, 100, 0, 20)     NameEsp.AnchorPoint = Vector2.new(0.5, 0.5)     NameEsp.BackgroundTransparency = 1      NameEsp.TextColor3 = Color3.fromRGB(255, 255, 255)      NameEsp.TextSize = 9    NameEsp.TextStrokeTransparency = 0    NameEsp.RichText = true     NameEsp.Text = plr.Name
-    local WeaponEsp = connections[plr].WeaponEsp    WeaponEsp.FontFace = Library.Fonts.Types.ProggyTiny   WeaponEsp.Visible = false     WeaponEsp.Parent = plrHoldster    WeaponEsp.Size = UDim2.new(0, 100, 0, 20)     WeaponEsp.AnchorPoint = Vector2.new(0.5, 0.5)     WeaponEsp.BackgroundTransparency = 1      WeaponEsp.TextColor3 = Color3.fromRGB(230, 166, 150)      WeaponEsp.TextSize = 9    WeaponEsp.TextStrokeTransparency = 0    WeaponEsp.RichText = true
-    local boxEsp = connections[plr].boxEsp   boxEsp.Visible = false    boxEsp.Parent = plrHoldster     boxEsp.BackgroundColor3 = Color3.fromRGB(0, 0, 0)  boxEsp.BackgroundColor3 = Color3.fromRGB(223,223,223)   boxEsp.BackgroundTransparency = 1  boxEsp.BorderColor3 = Color3.fromRGB(0,0,0)  boxEsp.BorderSizePixel = 2
-    local boxOutline = connections[plr].boxOutline  boxOutline.Enabled = true boxOutline.Parent = boxEsp  boxOutline.Thickness = 2 boxOutline.Color = Color3.fromRGB(203, 203, 203)
-    local boxEspGradient = connections[plr].boxEspGradient      boxEspGradient.Enabled = true       boxEspGradient.Parent = boxOutline     boxEspGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 255, 255)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 162, 162))};
-    local boxEspOutline = connections[plr].boxEspOutline boxEspOutline.Visible = false    boxEspOutline.Parent = plrHoldster     boxEspOutline.BackgroundColor3 = Color3.fromRGB(0, 0, 0)  boxEspOutline.BackgroundColor3 = Color3.fromRGB(223,223,223)   boxEspOutline.BackgroundTransparency = 1  boxEspOutline.BorderColor3 = Color3.fromRGB(0,0,0)  boxEspOutline.BorderSizePixel = 2
-    local boxEspOutlineStroke = connections[plr].boxEspOutlineStroke  boxEspOutlineStroke.Enabled = true boxEspOutlineStroke.Parent = boxEspOutline  boxEspOutlineStroke.Thickness = 1.4 boxEspOutlineStroke.Color = Color3.fromRGB(0, 0, 0)
-    local healthbarOutline = connections[plr].healthbarOutline    healthbarOutline.Visible = false   healthbarOutline.Parent = plrHoldster  healthbarOutline.Size = UDim2.new(0, 4, 0, 222) healthbarOutline.AnchorPoint = Vector2.new(0.5, 0.5) healthbarOutline.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-    local healthBar = connections[plr].healthBar    healthBar.Visible = false   healthBar.Parent = plrHoldster  healthBar.Size = UDim2.new(0, 4, 0, 222)    healthBar.BackgroundColor3 = Color3.fromRGB(0, 255, 0) 
-    local healthText = connections[plr].healthText    healthText.FontFace = Library.Fonts.Types.ProggyTiny   healthText.Visible = false     healthText.Parent = plrHoldster    healthText.Size = UDim2.new(0, 100, 0, 20)     healthText.AnchorPoint = Vector2.new(0.5, 0.5)     healthText.BackgroundTransparency = 1      healthText.TextColor3 = Color3.fromRGB(0, 255, 0)      healthText.TextSize = 9    healthText.TextStrokeTransparency = 0    healthText.RichText = true
-    local distanceText = connections[plr].distanceText    distanceText.FontFace = Library.Fonts.Types.ProggyTiny   distanceText.Visible = false     distanceText.Parent = plrHoldster    distanceText.Size = UDim2.new(0, 100, 0, 20)     distanceText.AnchorPoint = Vector2.new(0.5, 0.5)     distanceText.BackgroundTransparency = 1      distanceText.TextColor3 = Color3.fromRGB(247, 229, 225)      distanceText.TextSize = 9    distanceText.TextStrokeTransparency = 0    distanceText.RichText = true
+    local plrHoldster = connections[plr].plrHoldster
+    plrHoldster.Name = plr.Name
+    plrHoldster.Parent = coreGui.Holder
+    plrHoldster.Visible = false
+    plrHoldster.Position = UDim2.new(0, 0.5, 0, 0.5)
+    plrHoldster.Size = UDim2.new(0, 0.5, 0, 0.5)
+    local NameEsp = connections[plr].NameEsp
+    NameEsp.FontFace = Library.Fonts.Types.ProggyTiny
+    NameEsp.Visible = false
+    NameEsp.Parent = plrHoldster
+    NameEsp.Size = UDim2.new(0, 100, 0, 20)
+    NameEsp.AnchorPoint = Vector2.new(0.5, 0.5)
+    NameEsp.BackgroundTransparency = 1
+    NameEsp.TextColor3 = Color3.fromRGB(255, 255, 255)
+    NameEsp.TextSize = 9
+    NameEsp.TextStrokeTransparency = 0
+    NameEsp.RichText = true
+    NameEsp.Text = plr.Name
+    local WeaponEsp = connections[plr].WeaponEsp
+    WeaponEsp.FontFace = Library.Fonts.Types.ProggyTiny
+    WeaponEsp.Visible = false
+    WeaponEsp.Parent = plrHoldster
+    WeaponEsp.Size = UDim2.new(0, 100, 0, 20)
+    WeaponEsp.AnchorPoint = Vector2.new(0.5, 0.5)
+    WeaponEsp.BackgroundTransparency = 1
+    WeaponEsp.TextColor3 = Color3.fromRGB(230, 166, 150)
+    WeaponEsp.TextSize = 9
+    WeaponEsp.TextStrokeTransparency = 0
+    WeaponEsp.RichText = true
+    local boxEsp = connections[plr].boxEsp
+    boxEsp.Visible = false
+    boxEsp.Parent = plrHoldster
+    boxEsp.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    boxEsp.BackgroundColor3 = Color3.fromRGB(223,223,223)
+    boxEsp.BackgroundTransparency = 1
+    boxEsp.BorderColor3 = Color3.fromRGB(0,0,0)
+    boxEsp.BorderSizePixel = 2
+    local boxOutline = connections[plr].boxOutline
+    boxOutline.Enabled = true
+    boxOutline.Parent = boxEsp
+    boxOutline.Thickness = 2
+    boxOutline.Color = Color3.fromRGB(203, 203, 203)
+    local boxEspGradient = connections[plr].boxEspGradient
+    boxEspGradient.Enabled = true
+    boxEspGradient.Parent = boxOutline
+    boxEspGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 255, 255)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 162, 162))}
+    local boxEspOutline = connections[plr].boxEspOutline
+    boxEspOutline.Visible = false
+    boxEspOutline.Parent = plrHoldster
+    boxEspOutline.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    boxEspOutline.BackgroundColor3 = Color3.fromRGB(223,223,223)
+    boxEspOutline.BackgroundTransparency = 1
+    boxEspOutline.BorderColor3 = Color3.fromRGB(0,0,0)
+    boxEspOutline.BorderSizePixel = 2
+    local boxEspOutlineStroke = connections[plr].boxEspOutlineStroke
+    boxEspOutlineStroke.Enabled = true
+    boxEspOutlineStroke.Parent = boxEspOutline
+    boxEspOutlineStroke.Thickness = 1.4
+    boxEspOutlineStroke.Color = Color3.fromRGB(0, 0, 0)
+    local healthbarOutline = connections[plr].healthbarOutline
+    healthbarOutline.Visible = false
+    healthbarOutline.Parent = plrHoldster
+    healthbarOutline.Size = UDim2.new(0, 4, 0, 222)
+    healthbarOutline.AnchorPoint = Vector2.new(0.5, 0.5)
+    healthbarOutline.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    local healthBar = connections[plr].healthBar
+    healthBar.Visible = false
+    healthBar.Parent = plrHoldster
+    healthBar.Size = UDim2.new(0, 4, 0, 222)
+    healthBar.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+    local healthText = connections[plr].healthText
+    healthText.FontFace = Library.Fonts.Types.ProggyTiny
+    healthText.Visible = false
+    healthText.Parent = plrHoldster
+    healthText.Size = UDim2.new(0, 100, 0, 20)
+    healthText.AnchorPoint = Vector2.new(0.5, 0.5)
+    healthText.BackgroundTransparency = 1
+    healthText.TextColor3 = Color3.fromRGB(0, 255, 0)
+    healthText.TextSize = 9
+    healthText.TextStrokeTransparency = 0
+    healthText.RichText = true
+    local distanceText = connections[plr].distanceText
+    distanceText.FontFace = Library.Fonts.Types.ProggyTiny
+    distanceText.Visible = false
+    distanceText.Parent = plrHoldster
+    distanceText.Size = UDim2.new(0, 100, 0, 20)
+    distanceText.AnchorPoint = Vector2.new(0.5, 0.5)
+    distanceText.BackgroundTransparency = 1
+    distanceText.TextColor3 = Color3.fromRGB(247, 229, 225)
+    distanceText.TextSize = 9
+    distanceText.TextStrokeTransparency = 0
+    distanceText.RichText = true
 end
 function updateESP(hrp2D, distance, player)
     pcall(function()
-        local holdster = connections[player].plrHoldster;
-            local NameEsp = connections[player].NameEsp;
-            local WeaponEsp = connections[player].WeaponEsp;
-            local boxEsp = connections[player].boxEsp;
-            local healthbarOutline = connections[player].healthbarOutline;
-            local healthBar = connections[player].healthBar;
-            local healthText = connections[player].healthText;
-            local distanceText = connections[player].distanceText;
-            local boxEspOutline = connections[player].boxEspOutline;
-            local boxEspGradient = connections[player].boxEspGradient;
-            local container = connections[player].container;
-            local tool = getchartool(player.Character);
-            local isplrvisible = isvisible(player);
-            local humanoid = player.Character:WaitForChild("Humanoid");
-            local humanoidrootpart = player.Character:FindFirstChild("HumanoidRootPart");
-            local health = humanoid.Health / humanoid.MaxHealth;
-            local healthpercent = math.floor(humanoid.Health);
-            local distance = math.ceil(distance);
-            local Size = humanoidrootpart.Size.Y;
-            local scaleFactor = (Size * camera.ViewportSize.Y) / (hrp2D.Z * 2);
-            local w, h = 3 * scaleFactor, 4.5 * scaleFactor;
-            if humanoid and humanoid.Health > 0 then
-                if NameEsp.Visible == false then
-                    holdster.Visible = true
-                end
-                boxEsp.Position = UDim2.new(0, hrp2D.X - w / 2, 1, hrp2D.Y - h / 2)
-                boxEsp.Size = UDim2.new(0, w, 0, h)
-                boxEsp.Visible = getgenv().boxEnabled
-                boxEsp.BackgroundColor3 = getgenv().BoxColor
-                boxEsp.BackgroundTransparency = getgenv().boxTransparency
-                boxEspOutline.Position = UDim2.new(0, hrp2D.X - w / 2, 1, hrp2D.Y - h / 2)
-                boxEspOutline.Size = UDim2.new(0, w, 0, h)
-                boxEspOutline.Visible = getgenv().boxOutlineEnabled
-                boxEspOutline.BackgroundColor3 = getgenv().boxOutlineColor
-                boxEspOutline.BackgroundTransparency = getgenv().boxOutlineTransparency
-                NameEsp.Visible = getgenv().nameEnabled
-                NameEsp.Position = UDim2.new(0, hrp2D.X, 0, hrp2D.Y - h / 2 - 8)
-                NameEsp.Text = player.Name
-                NameEsp.TextColor3 = getgenv().nameColor
-                WeaponEsp.Visible = getgenv().weaponEnabled
-                WeaponEsp.Position = UDim2.new(0, hrp2D.X, 0, hrp2D.Y + h / 2 + 10)
-                WeaponEsp.Text = tostring(tool)
-                WeaponEsp.TextColor3 = getgenv().weaponESPColor
-                healthbarOutline.Visible = getgenv().healthBarOutlineEnabled
-                healthbarOutline.Position = UDim2.new(0, hrp2D.X - w / 2 - 8, 0, hrp2D.Y)
-                healthbarOutline.Size = UDim2.new(0, 2.2, 0, h)
-                healthBar.Visible = getgenv().healthBarEnabled
-                healthBar.Position = UDim2.new(0, hrp2D.X - w / 2 - 8, 0, hrp2D.Y + (h / 2) - (h * health))
-                healthBar.Size = UDim2.new(0, 2, 0, h * health)
-                healthText.Visible = getgenv().healthTextEnabled
-                healthText.Text =  tostring(healthpercent) .. '%'
-                healthText.Position = UDim2.new(0, hrp2D.X - w / 2 - 30 - healthbarOutline.Size.X.Offset, 0, hrp2D.Y - h / 2 + 5)
-                distanceText.Visible = getgenv().distanceEnabled
-                distanceText.TextColor3 = getgenv().distanceColor
-                distanceText.Text = tostring(distance) .. ' stds'
-                distanceText.Position = UDim2.new(0, hrp2D.X, 0, hrp2D.Y + h / 2 + 22)
-                boxEspGradient.Enabled = getgenv().boxGradient
-                if isplrvisible then
-                else
-                end
-            else
-                NameEsp.Visible = false
-                WeaponEsp.Visible = false
-                holdster.Visible = false
-                boxEsp.Visible = false
-                boxEspOutline.Visible = false
-                healthbarOutline.Visible = false
-                healthBar.Visible = false
-                healthText.Visible = false
+        if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then
+            destroyESP(player)
+            return
+        end
+        local holdster = connections[player].plrHoldster
+        local NameEsp = connections[player].NameEsp
+        local WeaponEsp = connections[player].WeaponEsp
+        local boxEsp = connections[player].boxEsp
+        local healthbarOutline = connections[player].healthbarOutline
+        local healthBar = connections[player].healthBar
+        local healthText = connections[player].healthText
+        local distanceText = connections[player].distanceText
+        local boxEspOutline = connections[player].boxEspOutline
+        local boxEspGradient = connections[player].boxEspGradient
+        local container = connections[player].container
+        local tool = getchartool(player.Character)
+        local isplrvisible = isvisible(player)
+        local humanoid = player.Character:WaitForChild("Humanoid")
+        local humanoidrootpart = player.Character:FindFirstChild("HumanoidRootPart")
+        local health = humanoid.Health / humanoid.MaxHealth
+        local healthpercent = math.floor(humanoid.Health)
+        local distance = math.ceil(distance)
+        local Size = humanoidrootpart.Size.Y
+        local scaleFactor = (Size * camera.ViewportSize.Y) / (hrp2D.Z * 2)
+        local w, h = 3 * scaleFactor, 4.5 * scaleFactor
+        if humanoid and humanoid.Health > 0 then
+            if NameEsp.Visible == false then
+                holdster.Visible = true
             end
+            boxEsp.Position = UDim2.new(0, hrp2D.X - w / 2, 1, hrp2D.Y - h / 2)
+            boxEsp.Size = UDim2.new(0, w, 0, h)
+            boxEsp.Visible = getgenv().boxEnabled
+            boxEsp.BackgroundColor3 = getgenv().BoxColor
+            boxEsp.BackgroundTransparency = getgenv().boxTransparency
+            boxEspOutline.Position = UDim2.new(0, hrp2D.X - w / 2, 1, hrp2D.Y - h / 2)
+            boxEspOutline.Size = UDim2.new(0, w, 0, h)
+            boxEspOutline.Visible = getgenv().boxOutlineEnabled
+            boxEspOutline.BackgroundColor3 = getgenv().boxOutlineColor
+            boxEspOutline.BackgroundTransparency = getgenv().boxOutlineTransparency
+            NameEsp.Visible = getgenv().nameEnabled
+            NameEsp.Position = UDim2.new(0, hrp2D.X, 0, hrp2D.Y - h / 2 - 8)
+            NameEsp.Text = player.Name
+            NameEsp.TextColor3 = getgenv().nameColor
+            WeaponEsp.Visible = getgenv().weaponEnabled
+            WeaponEsp.Position = UDim2.new(0, hrp2D.X, 0, hrp2D.Y + h / 2 + 10)
+            WeaponEsp.Text = tostring(tool)
+            WeaponEsp.TextColor3 = getgenv().weaponESPColor
+            healthbarOutline.Visible = getgenv().healthBarOutlineEnabled
+            healthbarOutline.Position = UDim2.new(0, hrp2D.X - w / 2 - 8, 0, hrp2D.Y)
+            healthbarOutline.Size = UDim2.new(0, 2.2, 0, h)
+            healthBar.Visible = getgenv().healthBarEnabled
+            healthBar.Position = UDim2.new(0, hrp2D.X - w / 2 - 8, 0, hrp2D.Y + (h / 2) - (h * health))
+            healthBar.Size = UDim2.new(0, 2, 0, h * health)
+            healthText.Visible = getgenv().healthTextEnabled
+            healthText.Text =  tostring(healthpercent) .. '%'
+            healthText.Position = UDim2.new(0, hrp2D.X - w / 2 - 30 - healthbarOutline.Size.X.Offset, 0, hrp2D.Y - h / 2 + 5)
+            distanceText.Visible = getgenv().distanceEnabled
+            distanceText.TextColor3 = getgenv().distanceColor
+            distanceText.Text = tostring(distance) .. ' stds'
+            distanceText.Position = UDim2.new(0, hrp2D.X, 0, hrp2D.Y + h / 2 + 22)
+            boxEspGradient.Enabled = getgenv().boxGradient
+        else
+            destroyESP(player)
+        end
     end)
 end
 for _, player in pairs(players:GetPlayers()) do
@@ -309,14 +383,13 @@ end)
 players.PlayerRemoving:Connect(function(player)
     destroyESP(player)
 end)
-runService.RenderStepped:Connect(LPH_NO_VIRTUALIZE( function()
+runService.RenderStepped:Connect(LPH_NO_VIRTUALIZE(function()
     for player, data in pairs(connections) do
         if player ~= LPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
             local humanoidrootpart = player.Character:FindFirstChild("HumanoidRootPart")
             local distance = (camera.CFrame.Position - humanoidrootpart.Position).Magnitude
             if humanoidrootpart then
                 local hrp2D, onScreen = camera:WorldToScreenPoint(humanoidrootpart.Position)
-
                 if onScreen and distance < getgenv().renderDistance then
                     updateESP(hrp2D, distance, player)
                 else
