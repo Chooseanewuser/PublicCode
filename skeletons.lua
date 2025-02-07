@@ -102,29 +102,41 @@ local function rem(skele)
 end
 
 rs.RenderStepped:Connect(function()
-    workspace.CurrentCamera.FieldOfView = getgenv().fieldofview or 70
-    if not getgenv().Skeleton then
+    pcall(function()
+        if not getgenv().Skeleton then
+            for _, player in ipairs(players:GetPlayers()) do
+                if skeles[player] then
+                    rem(skeles[player])
+                    skeles[player] = nil
+                end
+            end
+            return
+        end
         for _, player in ipairs(players:GetPlayers()) do
-            if skeles[player] then
-                rem(skeles[player])
-                skeles[player] = nil
+            if player.Character and player.Character:FindFirstChild("HumanoidRootPart") and player ~= lplr then
+                if not skeles[player] then
+                    skeles[player] = create()
+                end
+                upd(skeles[player], player.Character)
+            else
+                if skeles[player] then
+                    rem(skeles[player])
+                    skeles[player] = nil
+                end
             end
         end
-        return
-    end
-    for _, player in ipairs(players:GetPlayers()) do
-        if player.Character and player.Character:FindFirstChild("HumanoidRootPart") and player ~= lplr then
-            if not skeles[player] then
-                skeles[player] = create()
-            end
-            upd(skeles[player], player.Character)
+        local Camera = workspace.CurrentCamera
+        local originalFOV = Camera.FieldOfView
+        local zooming = false
+        if game:GetService("UserInputService"):IsKeyDown(getgenv().ZoomBind) then
+            zooming = true
+        end
+        if zooming then
+            Camera.FieldOfView = getgenv().ZoomFOV
         else
-            if skeles[player] then
-                rem(skeles[player])
-                skeles[player] = nil
-            end
+            Camera.FieldOfView = getgenv().FOVToggle and (getgenv().FOV or originalFOV) or originalFOV
         end
-    end
+    end)
 end)
 
 players.PlayerRemoving:Connect(function(player)
