@@ -11,19 +11,19 @@ getgenv().boxTransparency = getgenv().boxTransparency or 1
 getgenv().Outline = getgenv().Outline or false
 getgenv().Name = getgenv().Name or getgenv().Name or false
 getgenv().Name_Color = getgenv().Name_Color or Color3.new(1, 1, 1)
-getgenv().Weapon = getgenv().Weapon or false
+getgenv().Weapon = getgenv().Weapon or true
 getgenv().Weapon_Color = getgenv().Weapon_Color or Color3.new(1, 1, 1)
 getgenv().Distance = getgenv().Distance or false
 getgenv().Distance_Color = getgenv().Distance_Color or Color3.new(1, 1, 1)
-getgenv().Health = getgenv().Health or false
-getgenv().lookV = getgenv().lookV or false
+getgenv().Health = getgenv().Health or true
+getgenv().lookV = getgenv().lookV or true
 getgenv().lookV_Color = getgenv().lookV_Color or Color3.new(1, 1, 1)
 getgenv().lookV_length = getgenv().lookV_length or 2
 getgenv().headDot = getgenv().headDot or false
 getgenv().headDot_Color = getgenv().headDot_Color or Color3.new(1, 1, 1)
 getgenv().visCheck = getgenv().visCheck or false
-getgenv().Healthbar = getgenv().Healthbar or false
-getgenv().HealthbarOutline = getgenv().HealthbarOutline or false
+getgenv().Healthbar = getgenv().Healthbar or true
+getgenv().HealthbarOutline = getgenv().HealthbarOutline or true
 
 function getchartool(Character)
     for _, v in ipairs(Character:GetChildren()) do
@@ -218,11 +218,11 @@ for i, v in pairs(game.Players:GetChildren()) do
 
                         -------------------------------------------------------------------------------------------------------------// NAME \\-------------------------------------------------------------------------------------------------------------
 
-                        local isStaff = isstaff(v)
-                        Name.Position = Vector2.new(root_pos.X, root_pos.Y - BoxOutline.Size.Y / 2 - 15)
-                        Name.Text = isStaff and "[STAFF]: "..v.DisplayName or v.DisplayName
-                        Name.Visible = getgenv().Name
-                        Name.Color = getgenv().Name_Color
+                        --local isStaff = isstaff(v)
+                        --Name.Position = Vector2.new(root_pos.X, root_pos.Y - BoxOutline.Size.Y / 2 - 15)
+                        --Name.Text = isStaff and "[STAFF]: "..v.DisplayName or v.DisplayName
+                        --Name.Visible = getgenv().Name
+                        --Name.Color = getgenv().Name_Color
 
                         -------------------------------------------------------------------------------------------------------------// TOOL \\-------------------------------------------------------------------------------------------------------------
 
