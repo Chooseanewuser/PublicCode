@@ -1,4 +1,3 @@
-task.spawn(function()
 local dwEntities = cloneref(game:GetService("Players"))
 local RunService = cloneref(game:GetService("RunService"))
 local dwEntity = cloneref(game.Players.LocalPlayer)
@@ -637,5 +636,4 @@ dwEntities.PlayerAdded:Connect(function(v)
         )
     end
     coroutine.wrap(boxesp)()
-end)
 end)
