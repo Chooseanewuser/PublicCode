@@ -1,5 +1,5 @@
 getgenv().FOVtoggle = getgenv().FOVtoggle or false
-getgenv().FOVsize = getgenv().FOVsize or 100
+getgenv().FOVsize = getgenv().FOVsize or 200
 getgenv().FOVcolour = getgenv().FOVcolour or Color3.fromRGB(255, 255, 255)
 local rs = game:GetService("RunService")
 local uis = game:GetService("UserInputService")
