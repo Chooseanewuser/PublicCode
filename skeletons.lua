@@ -125,17 +125,6 @@ rs.RenderStepped:Connect(function()
                 end
             end
         end
-        local Camera = workspace.CurrentCamera
-        local originalFOV = Camera.FieldOfView
-        local zooming = false
-        if game:GetService("UserInputService"):IsKeyDown(getgenv().ZoomBind) then
-            zooming = true
-        end
-        if zooming then
-            Camera.FieldOfView = getgenv().ZoomFOV
-        else
-            Camera.FieldOfView = getgenv().FOVToggle and (getgenv().FOV or originalFOV) or originalFOV
-        end
     end)
 end)
 
