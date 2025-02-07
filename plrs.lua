@@ -6,8 +6,8 @@ local Lighting = cloneref(game:GetService("Lighting"))
 pcall(function()
 local ESP = {
     Enabled = true,
-    TeamCheck = true,
-    MaxDistance = 200,
+    TeamCheck = false,
+    MaxDistance = 2000,
     FontSize = 11,
     FadeOut = {
         OnDistance = true,
@@ -40,7 +40,7 @@ local ESP = {
         },
         Healthbar = {
             Enabled = true,  
-            HealthText = true, Lerp = false, HealthTextRGB = Color3.fromRGB(119, 120, 255),
+            HealthText = false, Lerp = false, HealthTextRGB = Color3.fromRGB(119, 120, 255),
             Width = 2.5,
             Gradient = true,
             GradientRGB1 = Color3.fromRGB(0, 255, 0), 
