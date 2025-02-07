@@ -41,7 +41,7 @@ local ESP = {
         Healthbar = {
             Enabled = true,  
             HealthText = false, Lerp = false, HealthTextRGB = Color3.fromRGB(119, 120, 255),
-            Width = 2.5,
+            Width = 3,
             Gradient = true,
             GradientRGB1 = Color3.fromRGB(0, 255, 0), 
             GradientRGB2 = Color3.fromRGB(0, 255, 0), 
