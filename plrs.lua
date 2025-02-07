@@ -325,10 +325,24 @@ do
                                     end
                                 end
                             end
+                            function getchartool(Character)
+                                for _, v in ipairs(Character:GetChildren()) do
+                                    if v:IsA("Model") and not v.Name:match("Armor") and v.Name ~= "HolsterModel" and v.Name ~= "Hair" and v.Name ~= "NameTag" and not v.Name:match("TorsoController") and not v.Name:match("Humanoid") and v.Name ~= "Shirt" and v.Name ~= "Pants" then
+                                        return v.Name
+                                    end
+                                end
+                                return "none"
+                            end
                             do
-                                Weapon.Text = "none"
-                                Weapon.Visible = ESP.Drawing.Weapons.Enabled and getgenv().weapon
-                            end                            
+                                if plr.Character then
+                                    local toolName = getchartool(plr.Character)
+                                    Weapon.Text = toolName
+                                    Weapon.Visible = ESP.Drawing.Weapons.Enabled and getgenv().weapon
+                                else
+                                    Weapon.Text = "none"
+                                    Weapon.Visible = false
+                                end
+                            end                          
                         else
                             HideESP();
                         end
