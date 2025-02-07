@@ -9,7 +9,7 @@ getgenv().ESP_Color = getgenv().ESP_Color or Color3.new(1, 1, 1)
 getgenv().BoxFilled = getgenv().BoxFilled or false
 getgenv().boxTransparency = getgenv().boxTransparency or 1
 getgenv().Outline = getgenv().Outline or false
-getgenv().Name = getgenv().Name or getgenv().Name or false
+getgenv().Name = getgenv().Name or false
 getgenv().Name_Color = getgenv().Name_Color or Color3.new(1, 1, 1)
 getgenv().Weapon = getgenv().Weapon or true
 getgenv().Weapon_Color = getgenv().Weapon_Color or Color3.new(1, 1, 1)
@@ -181,7 +181,6 @@ for i, v in pairs(game.Players:GetChildren()) do
                         v.Character.Humanoid.Health > 0 and
                         v.Character:FindFirstChild("Head")
                  then
-                    workspace.CurrentCamera.FieldOfView = getgenv().fieldofview or 80
                     local rootpart = v.Character.HumanoidRootPart
                     local root_pos, RootVis = dwcamera:WorldToViewportPoint(rootpart.Position)
                     local fov = workspace.CurrentCamera.FieldOfView
@@ -457,7 +456,6 @@ dwEntities.PlayerAdded:Connect(function(v)
                         v.Character.Humanoid.Health > 0 and
                         v.Character:FindFirstChild("Head")
                  then
-                    workspace.CurrentCamera.FieldOfView = getgenv().fieldofview or 80
                     local rootpart = v.Character.HumanoidRootPart
                     local root_pos, RootVis = dwcamera:WorldToViewportPoint(rootpart.Position)
                     local fov = workspace.CurrentCamera.FieldOfView
