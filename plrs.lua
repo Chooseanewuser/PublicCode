@@ -1,637 +1,357 @@
-local dwEntities = cloneref(game:GetService("Players"))
-local RunService = cloneref(game:GetService("RunService"))
-local dwEntity = cloneref(game.Players.LocalPlayer)
-local dwcamera = cloneref(workspace.CurrentCamera)
-local headOff = Vector3.new(0, 0.5, 0)
-local legOff = Vector3.new(0, 3, 0)
-getgenv().Boxes = getgenv().Boxes or false
-getgenv().ESP_Color = getgenv().ESP_Color or Color3.new(1, 1, 1)
-getgenv().BoxFilled = getgenv().BoxFilled or false
-getgenv().boxTransparency = getgenv().boxTransparency or 1
-getgenv().Outline = getgenv().Outline or false
-getgenv().Name = getgenv().Name or false
-getgenv().Name_Color = getgenv().Name_Color or Color3.new(1, 1, 1)
-getgenv().Weapon = getgenv().Weapon or true
-getgenv().Weapon_Color = getgenv().Weapon_Color or Color3.new(1, 1, 1)
-getgenv().Distance = getgenv().Distance or false
-getgenv().Distance_Color = getgenv().Distance_Color or Color3.new(1, 1, 1)
-getgenv().Health = getgenv().Health or true
-getgenv().lookV = getgenv().lookV or true
-getgenv().lookV_Color = getgenv().lookV_Color or Color3.new(1, 1, 1)
-getgenv().lookV_length = getgenv().lookV_length or 2
-getgenv().headDot = getgenv().headDot or false
-getgenv().headDot_Color = getgenv().headDot_Color or Color3.new(1, 1, 1)
-getgenv().visCheck = getgenv().visCheck or false
-getgenv().Healthbar = getgenv().Healthbar or true
-getgenv().HealthbarOutline = getgenv().HealthbarOutline or true
-
-function getchartool(Character)
-    for _, v in ipairs(Character:GetChildren()) do
-        if v:IsA("Model") and not v.Name:match("Armor") and v.Name ~= "HolsterModel" and v.Name ~= "Hair" and v.Name ~= "NameTag" and not v.Name:match("TorsoController") and not v.Name:match("Humanoid") and v.Name ~= "Shirt" and v.Name ~= "Pants" then
-            return v.Name
+local Workspace, RunService, Players, CoreGui, Lighting = cloneref(game:GetService("Workspace")), cloneref(game:GetService("RunService")), cloneref(game:GetService("Players")), game:GetService("CoreGui"), cloneref(game:GetService("Lighting"))
+local ESP = {
+    Enabled = true,
+    TeamCheck = true,
+    MaxDistance = 200,
+    FontSize = 11,
+    FadeOut = {
+        OnDistance = true,
+        OnDeath = false,
+        OnLeave = false,
+    },
+    Options = { 
+        Teamcheck = false, TeamcheckRGB = Color3.fromRGB(0, 255, 0),
+        Friendcheck = true, FriendcheckRGB = Color3.fromRGB(0, 255, 0),
+        Highlight = false, HighlightRGB = Color3.fromRGB(255, 0, 0),
+    },
+    Drawing = {
+        Names = {
+            Enabled = true,
+            RGB = Color3.fromRGB(255, 255, 255),
+        },
+        Flags = {
+            Enabled = false,
+        },
+        Distances = {
+            Enabled = true, 
+            Position = "Text",
+            RGB = Color3.fromRGB(255, 255, 255),
+        },
+        Weapons = {
+            Enabled = true, WeaponTextRGB = Color3.fromRGB(119, 120, 255),
+            Outlined = false,
+            Gradient = false,
+            GradientRGB1 = Color3.fromRGB(255, 255, 255), GradientRGB2 = Color3.fromRGB(119, 120, 255),
+        },
+        Healthbar = {
+            Enabled = true,  
+            HealthText = true, Lerp = false, HealthTextRGB = Color3.fromRGB(119, 120, 255),
+            Width = 2.5,
+            Gradient = true,
+            GradientRGB1 = Color3.fromRGB(0, 255, 0), 
+            GradientRGB2 = Color3.fromRGB(0, 255, 0), 
+            GradientRGB3 = Color3.fromRGB(0, 255, 0),
+        },
+        Boxes = {
+            Animate = false,
+            RotationSpeed = 300,
+            Gradient = false, GradientRGB1 = Color3.fromRGB(119, 120, 255), GradientRGB2 = Color3.fromRGB(0, 0, 0), 
+            GradientFill = false,
+            GradientFillRGB1 = Color3.fromRGB(119, 120, 255), 
+            GradientFillRGB2 = Color3.fromRGB(0, 0, 0), 
+            Filled = {
+                Enabled = false,
+                Transparency = 0.75,
+                RGB = Color3.fromRGB(0, 0, 0),
+            },
+            Full = {
+                Enabled = false,
+                RGB = Color3.fromRGB(255, 255, 255),
+            },
+            Corner = {
+                Enabled = false,
+                RGB = Color3.fromRGB(255, 255, 255),
+            },
+        };
+    };
+    Connections = {
+        RunService = RunService;
+    };
+    Fonts = {};
+}
+local Euphoria = ESP.Connections;
+local lplayer = Players.LocalPlayer;
+local camera = game.Workspace.CurrentCamera;
+local Cam = Workspace.CurrentCamera;
+local RotationAngle, Tick = -45, tick();
+local Weapon_Icons = {
+    ["Wooden Bow"] = "http://www.roblox.com/asset/?id=17677465400",
+    ["Crossbow"] = "http://www.roblox.com/asset/?id=17677473017",
+    ["Salvaged SMG"] = "http://www.roblox.com/asset/?id=17677463033",
+    ["Salvaged AK47"] = "http://www.roblox.com/asset/?id=17677455113",
+    ["Salvaged AK74u"] = "http://www.roblox.com/asset/?id=17677442346",
+    ["Salvaged M14"] = "http://www.roblox.com/asset/?id=17677444642",
+    ["Salvaged Python"] = "http://www.roblox.com/asset/?id=17677451737",
+    ["Military PKM"] = "http://www.roblox.com/asset/?id=17677449448",
+    ["Military M4A1"] = "http://www.roblox.com/asset/?id=17677479536",
+    ["Bruno's M4A1"] = "http://www.roblox.com/asset/?id=17677471185",
+    ["Military Barrett"] = "http://www.roblox.com/asset/?id=17677482998",
+    ["Salvaged Skorpion"] = "http://www.roblox.com/asset/?id=17677459658",
+    ["Salvaged Pump Action"] = "http://www.roblox.com/asset/?id=17677457186",
+    ["Military AA12"] = "http://www.roblox.com/asset/?id=17677475227",
+    ["Salvaged Break Action"] = "http://www.roblox.com/asset/?id=17677468751",
+    ["Salvaged Pipe Rifle"] = "http://www.roblox.com/asset/?id=17677468751",
+    ["Salvaged P250"] = "http://www.roblox.com/asset/?id=17677447257",
+    ["Nail Gun"] = "http://www.roblox.com/asset/?id=17677484756"
+};
+local Functions = {}
+do
+    function Functions:Create(Class, Properties)
+        local _Instance = typeof(Class) == 'string' and Instance.new(Class) or Class
+        for Property, Value in pairs(Properties) do
+            _Instance[Property] = Value
+        end
+        return _Instance;
+    end
+    function Functions:FadeOutOnDist(element, distance)
+        local transparency = math.max(0.1, 1 - (distance / ESP.MaxDistance))
+        if element:IsA("TextLabel") then
+            element.TextTransparency = 1 - transparency
+        elseif element:IsA("ImageLabel") then
+            element.ImageTransparency = 1 - transparency
+        elseif element:IsA("UIStroke") then
+            element.Transparency = 1 - transparency
+        elseif element:IsA("Frame") and (element == Healthbar or element == BehindHealthbar) then
+            element.BackgroundTransparency = 1 - transparency
+        elseif element:IsA("Frame") then
+            element.BackgroundTransparency = 1 - transparency
+        elseif element:IsA("Highlight") then
+            element.FillTransparency = 1 - transparency
+            element.OutlineTransparency = 1 - transparency
+        end;
+    end;  
+end;
+do
+    local ScreenGui = Functions:Create("ScreenGui", {
+        Parent = CoreGui,
+        Name = "ESPHolder",
+    });
+    local DupeCheck = function(plr)
+        if ScreenGui:FindFirstChild(plr.Name) then
+            ScreenGui[plr.Name]:Destroy()
         end
     end
-    return "hands"
-end
-
-local function getDist(Character, v)
-    local success, dist = pcall(function() return (Character.HumanoidRootPart.Position - v.Character.HumanoidRootPart.Position).Magnitude end)
-    return success and dist or nil
-end
-
-local function isvisible(player)
-    local localPlayer = game.Players.LocalPlayer
-    local localChar = localPlayer.Character
-    local targetChar = player.Character
-    if not localChar or not targetChar then
-        return false
-    end
-    local startPos = localChar:WaitForChild("Head").Position
-    local endPos = targetChar:WaitForChild("Head").Position
-    local direction = endPos - startPos
-    local ray = Ray.new(startPos, direction)
-    local hitPart = workspace:FindPartOnRay(ray, localChar)
-    return hitPart == nil or hitPart:IsDescendantOf(targetChar)
-end
-
-local function isstaff(player)
-    return false
-end
-
-for i, v in pairs(game.Players:GetChildren()) do 
-
-    -------------------------------------------------------------------------------------------------------------// BOX & OUTLINE \\-------------------------------------------------------------------------------------------------------------
-
-    local BoxOutline = Drawing.new("Square") 
-    BoxOutline.Visible = false
-    BoxOutline.Color = Color3.new(0, 0, 0)
-    BoxOutline.Thickness = 3
-    BoxOutline.Transparency = 1
-    BoxOutline.Filled = false
-
-    local Box = Drawing.new("Square")
-    Box.Visible = false
-    Box.Color = Color3.new(1, 1, 1)
-    Box.Thickness = 1
-    Box.Transparency = 1
-    Box.Filled = false
-    Box.ZIndex = 4
-    
-    -------------------------------------------------------------------------------------------------------------// NAME \\-------------------------------------------------------------------------------------------------------------
-
-    local Name = Drawing.new("Text")
-    Name.Visible = false
-    Name.Color = Color3.new(1, 1, 1)
-    Name.Font = 2
-    Name.Transparency = 1
-    Name.Outline = true
-    Name.Center = true
-    Name.Size = 12
-
-    -------------------------------------------------------------------------------------------------------------// WEAPON \\-------------------------------------------------------------------------------------------------------------
-
-    local Weapon = Drawing.new("Text")
-    Weapon.Visible = false
-    Weapon.Color = Color3.new(1, 1, 1)
-    Weapon.Font = 2
-    Weapon.Transparency = 1
-    Weapon.Outline = true
-    Weapon.Center = true
-    Weapon.Size = 11
-
-    -------------------------------------------------------------------------------------------------------------// HEALTH \\-------------------------------------------------------------------------------------------------------------
-
-    local Health = Drawing.new("Text")
-    Health.Visible = false
-    Health.Font = 2
-    Health.Transparency = 1
-    Health.Outline = true
-    Health.Center = true
-    Health.Size = 12
-
-    -------------------------------------------------------------------------------------------------------------// DISTANCE \\-------------------------------------------------------------------------------------------------------------
-
-    local Distance = Drawing.new("Text")
-    Distance.Visible = false
-    Distance.Font = 2
-    Distance.Transparency = 1
-    Distance.Outline = true
-    Distance.Center = true
-    Distance.Size = 12
-
-    -------------------------------------------------------------------------------------------------------------// STAFF CHECK \\-------------------------------------------------------------------------------------------------------------
-
-    local staffCheck = Drawing.new("Text")
-    staffCheck.Visible = false
-    staffCheck.Font = 2
-    staffCheck.Transparency = 1
-    staffCheck.Outline = true
-    staffCheck.Center = true
-    staffCheck.Size = 12
-
-    -------------------------------------------------------------------------------------------------------------// VIS CHECK \\-------------------------------------------------------------------------------------------------------------
-
-    local visCheck = Drawing.new("Text")
-    visCheck.Visible = false
-    visCheck.Font = 2
-    visCheck.Transparency = 1
-    visCheck.Outline = true
-    visCheck.Center = true
-    visCheck.Size = 12
-    -------------------------------------------------------------------------------------------------------------// LOOK VECTOR \\-------------------------------------------------------------------------------------------------------------
-
-    local lookV = Drawing.new("Line")
-    lookV.Visible = false
-
-    -------------------------------------------------------------------------------------------------------------// HEAD DOT \\-------------------------------------------------------------------------------------------------------------
-
-    local headDot = Drawing.new("Circle")
-    headDot.Visible = false
-    headDot.Transparency = 1
-    headDot.NumSides = 20
-    headDot.Radius = 5
-    headDot.Filled = true
-    headDot.Color = Color3.new(1, 1, 1)
-
-    -------------------------------------------------------------------------------------------------------------// HEALTH BAR & HEALTH BAR OUTLINE \\-------------------------------------------------------------------------------------------------------------
-
-    local healthbarOutline = Drawing.new("Square")
-    healthbarOutline.Thickness = 3
-    healthbarOutline.Filled = false
-    healthbarOutline.Color = Color3.new(0, 0, 0)
-    healthbarOutline.Transparency = 1
-    healthbarOutline.Visible = false
-
-    local healthBar = Drawing.new("Square")
-    healthBar.Thickness = 1
-    healthBar.Filled = false
-    healthBar.Color = Color3.new(0, 1, 0)
-    healthBar.Transparency = 1
-    healthBar.Visible = false
-
-    -------------------------------------------------------------------------------------------------------------// boxesp \\-------------------------------------------------------------------------------------------------------------
-
-    function boxesp()
-        RunService.RenderStepped:Connect(
-            function()
-                if
-                    v.Character ~= nil and v.Character:FindFirstChild("Humanoid") ~= nil and
-                        v.Character:FindFirstChild("HumanoidRootPart") ~= nil and
-                        v ~= dwEntities.LocalPlayer and
-                        v.Character.Humanoid.Health > 0 and
-                        v.Character:FindFirstChild("Head")
-                 then
-                    local rootpart = v.Character.HumanoidRootPart
-                    local root_pos, RootVis = dwcamera:WorldToViewportPoint(rootpart.Position)
-                    local fov = workspace.CurrentCamera.FieldOfView
-                    local distance = (dwcamera.CFrame.Position - rootpart.Position).Magnitude
-                    local scale = (1 / distance) * (70 / fov) * 1000
-
-                    if RootVis then
-                        -------------------------------------------------------------------------------------------------------------// BOX & OUTLINE \\-------------------------------------------------------------------------------------------------------------
-
-                        BoxOutline.Size = Vector2.new(4 * scale, 5.6 * scale)
-                        BoxOutline.Position = Vector2.new(root_pos.X - BoxOutline.Size.X / 2, root_pos.Y - BoxOutline.Size.Y / 2)
-                        BoxOutline.Visible = getgenv().Outline
-
-                        Box.Size = Vector2.new(4 * scale, 5.6 * scale)
-                        Box.Position = Vector2.new(root_pos.X - Box.Size.X / 2, root_pos.Y - Box.Size.Y / 2)
-                        Box.Visible = getgenv().Boxes
-                        Box.Color = getgenv().ESP_Color
-                        Box.Filled = getgenv().BoxFilled
-                        Box.Transparency = getgenv().boxTransparency
-
-                        -------------------------------------------------------------------------------------------------------------// OFFSETS \\-------------------------------------------------------------------------------------------------------------
-
-                        local boxWidth = BoxOutline.Size.X -- width
-                        local boxHeight = BoxOutline.Size.Y -- height
-                        
-                        local boxCenterX = root_pos.X
-                        local boxCenterY = root_pos.Y - (boxHeight / 2)
-            
-                        local rightSide = (boxWidth / 2 + 12)
-
-                        local headCFrame = v.Character.Head.CFrame
-                        local viewVector = (headCFrame * CFrame.new(0, 0, - getgenv().lookV_length)).Position
-                        local viewViewport = dwcamera:WorldToViewportPoint(viewVector)
-
-                        -------------------------------------------------------------------------------------------------------------// NAME \\-------------------------------------------------------------------------------------------------------------
-
-                        --local isStaff = isstaff(v)
-                        --Name.Position = Vector2.new(root_pos.X, root_pos.Y - BoxOutline.Size.Y / 2 - 15)
-                        --Name.Text = isStaff and "[STAFF]: "..v.DisplayName or v.DisplayName
-                        --Name.Visible = getgenv().Name
-                        --Name.Color = getgenv().Name_Color
-
-                        -------------------------------------------------------------------------------------------------------------// TOOL \\-------------------------------------------------------------------------------------------------------------
-
-                        local tool = getchartool(v.Character)
-
-                        Weapon.Position = Vector2.new(root_pos.X, root_pos.Y + BoxOutline.Size.Y / 2)
-                        Weapon.Text = " " .. tostring(tool) .. " "
-                        Weapon.Visible = getgenv().Weapon
-                        Weapon.Color = getgenv().Weapon_Color
-
-                        -------------------------------------------------------------------------------------------------------------// DISTANCE \\-------------------------------------------------------------------------------------------------------------
-
-                        local distance = getDist(dwEntity.Character, v)
-                        Distance.Position = Vector2.new(Weapon.Position.X, Weapon.Position.Y + 15)
-                        if distance then
-                            Distance.Text = " " .. tostring(math.round(distance)) .. " "
-                        else
-                            Distance.Text = " "
-                        end
-                        Distance.Visible = getgenv().Distance
-                        Distance.Color = getgenv().Distance_Color
-
-                        -------------------------------------------------------------------------------------------------------------// HEALTH \\-------------------------------------------------------------------------------------------------------------
-
-                        local headPosition = v.Character.Head.Position
-                        local headViewport = dwcamera:WorldToViewportPoint(headPosition)
-                        local healthVal = v.Character.Humanoid.Health
-
-                        local fullHP = Color3.new(0, 1, 0)
-                        local emptyHP = Color3.new(1, 0, 0)
-
-                        local interpfactor = 1 - (healthVal / 100)
-
-                        local currentColor = fullHP:Lerp(emptyHP, interpfactor)
-
-                        -------------------------------------------------------------------------------------------------------------// HEALTH BAR \\-------------------------------------------------------------------------------------------------------------
-                        
-                        healthbarOutline.Visible = getgenv().HealthbarOutline
-                        healthbarOutline.Size = Vector2.new(2, boxHeight)
-                        healthbarOutline.Position = BoxOutline.Position - Vector2.new(6,0)
-
-                        healthBar.Visible = getgenv().Healthbar
-                        local clampedHealthVal = math.clamp(healthVal, 0, 100)
-
-                        healthBar.Size = Vector2.new(2, boxHeight * (clampedHealthVal / 100))
-                        healthBar.Position = Vector2.new(healthbarOutline.Position.X, healthbarOutline.Position.Y + boxHeight - healthBar.Size.Y)
-                        healthBar.Color = currentColor
-
-                        -------------------------------------------------------------------------------------------------------------// HEALTH TEXT \\-------------------------------------------------------------------------------------------------------------
-
-                        Health.Position = Vector2.new(healthBar.Position.X - 10, healthBar.Position.Y)
-                        if healthVal then
-                            Health.Text = " " .. tostring(math.round(healthVal)) .. " "
-                        else
-                            Health.Text = " "
-                        end
-                        Health.Visible = getgenv().Health
-                        Health.Color = currentColor
-
-                        -------------------------------------------------------------------------------------------------------------// LOOK VECTOR \\-------------------------------------------------------------------------------------------------------------
-
-                        lookV.Visible = getgenv().lookV
-                        lookV.From = Vector2.new(headViewport.X, headViewport.Y)
-                        lookV.To = Vector2.new(viewViewport.X, viewViewport.Y)
-                        lookV.Color = getgenv().lookV_Color
-
-                        -------------------------------------------------------------------------------------------------------------// HEAD DOT \\-------------------------------------------------------------------------------------------------------------
-
-                        headDot.Visible = getgenv().headDot
-                        headDot.Position = Vector2.new(headViewport.X, headViewport.Y)
-                        headDot.Color = getgenv().headDot_Color
-
-                        -------------------------------------------------------------------------------------------------------------// VISIBLE CHECK \\-------------------------------------------------------------------------------------------------------------
-                        local isplrVis = isvisible(v)
-                        
-                        if isplrVis then
-                            visCheck.Visible = getgenv().visCheck
-                            visCheck.Position = Vector2.new(boxCenterX + rightSide, boxCenterY)
-                            visCheck.Color = Color3.new(0, 1, 0)
-                            headDot.Visible = getgenv().headDot
-                            headDot.Color = Color3.new(1, 0.768627, 0)
-                            visCheck.Text = " VIS "
-                        else
-                            visCheck.Text = "  "
-                            headDot.Visible = false
-                            visCheck.Position = Vector2.new(boxCenterX + rightSide, boxCenterY)
-                            visCheck.Color = Color3.new(255, 0, 0)
-                            headDot.Color = Color3.new(1, 1, 1)
-                        end
-                    else
-                        Box.Visible = false
-                        BoxOutline.Visible = false
-                        Name.Visible = false
-                        Weapon.Visible = false
-                        Distance.Visible = false
-                        Health.Visible = false
-                        lookV.Visible = false
-                        visCheck.Visible = false
-                        headDot.Visible = false
-                        healthbarOutline.Visible = false
-                        healthBar.Visible = false
-                    end
-                else
-                    Box.Visible = false
-                    BoxOutline.Visible = false
-                    Name.Visible = false
-                    Weapon.Visible = false
-                    Distance.Visible = false
-                    Health.Visible = false
-                    lookV.Visible = false
-                    visCheck.Visible = false
-                    headDot.Visible = false
-                    healthbarOutline.Visible = false
-                    healthBar.Visible = false
+    local ESP = function(plr)
+        coroutine.wrap(DupeCheck)(plr)
+        local Name = Functions:Create("TextLabel", {Parent = ScreenGui, Position = UDim2.new(0.5, 0, 0, -11), Size = UDim2.new(0, 100, 0, 20), AnchorPoint = Vector2.new(0.5, 0.5), BackgroundTransparency = 1, TextColor3 = Color3.fromRGB(255, 255, 255), Font = Enum.Font.JosefinSans, TextSize = ESP.FontSize, TextStrokeTransparency = 0, TextStrokeColor3 = Color3.fromRGB(0, 0, 0), RichText = true})
+        local Distance = Functions:Create("TextLabel", {Parent = ScreenGui, Position = UDim2.new(0.5, 0, 0, 11), Size = UDim2.new(0, 100, 0, 20), AnchorPoint = Vector2.new(0.5, 0.5), BackgroundTransparency = 1, TextColor3 = Color3.fromRGB(255, 255, 255), Font = Enum.Font.JosefinSans, TextSize = ESP.FontSize, TextStrokeTransparency = 0, TextStrokeColor3 = Color3.fromRGB(0, 0, 0), RichText = true})
+        local Weapon = Functions:Create("TextLabel", {Parent = ScreenGui, Position = UDim2.new(0.5, 0, 0, 31), Size = UDim2.new(0, 100, 0, 20), AnchorPoint = Vector2.new(0.5, 0.5), BackgroundTransparency = 1, TextColor3 = Color3.fromRGB(255, 255, 255), Font = Enum.Font.JosefinSans, TextSize = ESP.FontSize, TextStrokeTransparency = 0, TextStrokeColor3 = Color3.fromRGB(0, 0, 0), RichText = true})
+        local Box = Functions:Create("Frame", {Parent = ScreenGui, BackgroundColor3 = Color3.fromRGB(0, 0, 0), BackgroundTransparency = 0.75, BorderSizePixel = 0})
+        local Gradient1 = Functions:Create("UIGradient", {Parent = Box, Enabled = ESP.Drawing.Boxes.GradientFill, Color = ColorSequence.new{ColorSequenceKeypoint.new(0, ESP.Drawing.Boxes.GradientFillRGB1), ColorSequenceKeypoint.new(1, ESP.Drawing.Boxes.GradientFillRGB2)}})
+        local Outline = Functions:Create("UIStroke", {Parent = Box, Enabled = ESP.Drawing.Boxes.Gradient, Transparency = 0, Color = Color3.fromRGB(255, 255, 255), LineJoinMode = Enum.LineJoinMode.Miter})
+        local Gradient2 = Functions:Create("UIGradient", {Parent = Outline, Enabled = ESP.Drawing.Boxes.Gradient, Color = ColorSequence.new{ColorSequenceKeypoint.new(0, ESP.Drawing.Boxes.GradientRGB1), ColorSequenceKeypoint.new(1, ESP.Drawing.Boxes.GradientRGB2)}})
+        local Healthbar = Functions:Create("Frame", {Parent = ScreenGui, BackgroundColor3 = Color3.fromRGB(255, 255, 255), BackgroundTransparency = 0})
+        local BehindHealthbar = Functions:Create("Frame", {Parent = ScreenGui, ZIndex = -1, BackgroundColor3 = Color3.fromRGB(0, 0, 0), BackgroundTransparency = 0})
+        local HealthbarGradient = Functions:Create("UIGradient", {Parent = Healthbar, Enabled = ESP.Drawing.Healthbar.Gradient, Rotation = -90, Color = ColorSequence.new{ColorSequenceKeypoint.new(0, ESP.Drawing.Healthbar.GradientRGB1), ColorSequenceKeypoint.new(0.5, ESP.Drawing.Healthbar.GradientRGB2), ColorSequenceKeypoint.new(1, ESP.Drawing.Healthbar.GradientRGB3)}})
+        local HealthText = Functions:Create("TextLabel", {Parent = ScreenGui, Position = UDim2.new(0.5, 0, 0, 31), Size = UDim2.new(0, 100, 0, 20), AnchorPoint = Vector2.new(0.5, 0.5), BackgroundTransparency = 1, TextColor3 = Color3.fromRGB(255, 255, 255), Font = Enum.Font.JosefinSans, TextSize = ESP.FontSize, TextStrokeTransparency = 0, TextStrokeColor3 = Color3.fromRGB(0, 0, 0)})
+        local WeaponIcon = Functions:Create("ImageLabel", {Parent = ScreenGui, BackgroundTransparency = 1, BorderColor3 = Color3.fromRGB(0, 0, 0), BorderSizePixel = 0, Size = UDim2.new(0, 40, 0, 40)})
+        local Gradient3 = Functions:Create("UIGradient", {Parent = WeaponIcon, Rotation = -90, Enabled = ESP.Drawing.Weapons.Gradient, Color = ColorSequence.new{ColorSequenceKeypoint.new(0, ESP.Drawing.Weapons.GradientRGB1), ColorSequenceKeypoint.new(1, ESP.Drawing.Weapons.GradientRGB2)}})
+        local LeftTop = Functions:Create("Frame", {Parent = ScreenGui, BackgroundColor3 = ESP.Drawing.Boxes.Corner.RGB, Position = UDim2.new(0, 0, 0, 0)})
+        local LeftSide = Functions:Create("Frame", {Parent = ScreenGui, BackgroundColor3 = ESP.Drawing.Boxes.Corner.RGB, Position = UDim2.new(0, 0, 0, 0)})
+        local RightTop = Functions:Create("Frame", {Parent = ScreenGui, BackgroundColor3 = ESP.Drawing.Boxes.Corner.RGB, Position = UDim2.new(0, 0, 0, 0)})
+        local RightSide = Functions:Create("Frame", {Parent = ScreenGui, BackgroundColor3 = ESP.Drawing.Boxes.Corner.RGB, Position = UDim2.new(0, 0, 0, 0)})
+        local BottomSide = Functions:Create("Frame", {Parent = ScreenGui, BackgroundColor3 = ESP.Drawing.Boxes.Corner.RGB, Position = UDim2.new(0, 0, 0, 0)})
+        local BottomDown = Functions:Create("Frame", {Parent = ScreenGui, BackgroundColor3 = ESP.Drawing.Boxes.Corner.RGB, Position = UDim2.new(0, 0, 0, 0)})
+        local BottomRightSide = Functions:Create("Frame", {Parent = ScreenGui, BackgroundColor3 = ESP.Drawing.Boxes.Corner.RGB, Position = UDim2.new(0, 0, 0, 0)})
+        local BottomRightDown = Functions:Create("Frame", {Parent = ScreenGui, BackgroundColor3 = ESP.Drawing.Boxes.Corner.RGB, Position = UDim2.new(0, 0, 0, 0)})
+        local Flag1 = Functions:Create("TextLabel", {Parent = ScreenGui, Position = UDim2.new(1, 0, 0, 0), Size = UDim2.new(0, 100, 0, 20), AnchorPoint = Vector2.new(0.5, 0.5), BackgroundTransparency = 1, TextColor3 = Color3.fromRGB(255, 255, 255), Font = Enum.Font.JosefinSans, TextSize = ESP.FontSize, TextStrokeTransparency = 0, TextStrokeColor3 = Color3.fromRGB(0, 0, 0)})
+        local Flag2 = Functions:Create("TextLabel", {Parent = ScreenGui, Position = UDim2.new(1, 0, 0, 0), Size = UDim2.new(0, 100, 0, 20), AnchorPoint = Vector2.new(0.5, 0.5), BackgroundTransparency = 1, TextColor3 = Color3.fromRGB(255, 255, 255), Font = Enum.Font.JosefinSans, TextSize = ESP.FontSize, TextStrokeTransparency = 0, TextStrokeColor3 = Color3.fromRGB(0, 0, 0)})
+        local Updater = function()
+            local Connection;
+            local function HideESP()
+                Box.Visible = false;
+                Name.Visible = false;
+                Distance.Visible = false;
+                Weapon.Visible = false;
+                Healthbar.Visible = false;
+                BehindHealthbar.Visible = false;
+                HealthText.Visible = false;
+                WeaponIcon.Visible = false;
+                LeftTop.Visible = false;
+                LeftSide.Visible = false;
+                BottomSide.Visible = false;
+                BottomDown.Visible = false;
+                RightTop.Visible = false;
+                RightSide.Visible = false;
+                BottomRightSide.Visible = false;
+                BottomRightDown.Visible = false;
+                Flag1.Visible = false;
+                Flag2.Visible = false;
+                if not plr then
+                    ScreenGui:Destroy();
+                    Connection:Disconnect();
                 end
             end
-        )
-    end
-    coroutine.wrap(boxesp)()
-end
-
-dwEntities.PlayerAdded:Connect(function(v)
-    
-    -------------------------------------------------------------------------------------------------------------// BOX & OUTLINE \\-------------------------------------------------------------------------------------------------------------
-
-    local BoxOutline = Drawing.new("Square") 
-    BoxOutline.Visible = false
-    BoxOutline.Color = Color3.new(0, 0, 0)
-    BoxOutline.Thickness = 3
-    BoxOutline.Transparency = 1
-    BoxOutline.Filled = false
-
-    local Box = Drawing.new("Square")
-    Box.Visible = false
-    Box.Color = Color3.new(1, 1, 1)
-    Box.Thickness = 1
-    Box.Transparency = 1
-    Box.Filled = false
-    Box.ZIndex = 4
-    
-    -------------------------------------------------------------------------------------------------------------// NAME \\-------------------------------------------------------------------------------------------------------------
-
-    local Name = Drawing.new("Text")
-    Name.Visible = false
-    Name.Color = Color3.new(1, 1, 1)
-    Name.Font = 2
-    Name.Transparency = 1
-    Name.Outline = true
-    Name.Center = true
-    Name.Size = 12
-
-    -------------------------------------------------------------------------------------------------------------// WEAPON \\-------------------------------------------------------------------------------------------------------------
-
-    local Weapon = Drawing.new("Text")
-    Weapon.Visible = false
-    Weapon.Color = Color3.new(1, 1, 1)
-    Weapon.Font = 2
-    Weapon.Transparency = 1
-    Weapon.Outline = true
-    Weapon.Center = true
-    Weapon.Size = 11
-
-    -------------------------------------------------------------------------------------------------------------// HEALTH \\-------------------------------------------------------------------------------------------------------------
-
-    local Health = Drawing.new("Text")
-    Health.Visible = false
-    Health.Font = 2
-    Health.Transparency = 1
-    Health.Outline = true
-    Health.Center = true
-    Health.Size = 12
-
-    -------------------------------------------------------------------------------------------------------------// DISTANCE \\-------------------------------------------------------------------------------------------------------------
-
-    local Distance = Drawing.new("Text")
-    Distance.Visible = false
-    Distance.Font = 2
-    Distance.Transparency = 1
-    Distance.Outline = true
-    Distance.Center = true
-    Distance.Size = 12
-
-    -------------------------------------------------------------------------------------------------------------// VIS CHECK \\-------------------------------------------------------------------------------------------------------------
-
-    local visCheck = Drawing.new("Text")
-    visCheck.Visible = false
-    visCheck.Font = 2
-    visCheck.Transparency = 1
-    visCheck.Outline = true
-    visCheck.Center = true
-    visCheck.Size = 12
-    -------------------------------------------------------------------------------------------------------------// LOOK VECTOR \\-------------------------------------------------------------------------------------------------------------
-
-    local lookV = Drawing.new("Line")
-    lookV.Visible = false
-
-    -------------------------------------------------------------------------------------------------------------// HEAD DOT \\-------------------------------------------------------------------------------------------------------------
-
-    local headDot = Drawing.new("Circle")
-    headDot.Visible = false
-    headDot.Transparency = 1
-    headDot.NumSides = 20
-    headDot.Radius = 5
-    headDot.Filled = true
-    headDot.Color = Color3.new(1, 1, 1)
-
-    -------------------------------------------------------------------------------------------------------------// HEALTH BAR & HEALTH BAR OUTLINE \\-------------------------------------------------------------------------------------------------------------
-
-    local healthbarOutline = Drawing.new("Square")
-    healthbarOutline.Thickness = 3
-    healthbarOutline.Filled = false
-    healthbarOutline.Color = Color3.new(0, 0, 0)
-    healthbarOutline.Transparency = 1
-    healthbarOutline.Visible = false
-
-    local healthBar = Drawing.new("Square")
-    healthBar.Thickness = 1
-    healthBar.Filled = false
-    healthBar.Color = Color3.new(0, 1, 0)
-    healthBar.Transparency = 1
-    healthBar.Visible = false
-
-    -------------------------------------------------------------------------------------------------------------// boxesp \\-------------------------------------------------------------------------------------------------------------
-
-    function boxesp()
-        RunService.RenderStepped:Connect(
-            function()
-                if
-                    v.Character ~= nil and v.Character:FindFirstChild("Humanoid") ~= nil and
-                        v.Character:FindFirstChild("HumanoidRootPart") ~= nil and
-                        v ~= dwEntities.LocalPlayer and
-                        v.Character.Humanoid.Health > 0 and
-                        v.Character:FindFirstChild("Head")
-                 then
-                    local rootpart = v.Character.HumanoidRootPart
-                    local root_pos, RootVis = dwcamera:WorldToViewportPoint(rootpart.Position)
-                    local fov = workspace.CurrentCamera.FieldOfView
-                    local distance = (dwcamera.CFrame.Position - rootpart.Position).Magnitude
-                    local scale = (1 / distance) * (70 / fov) * 1000
-
-                    if RootVis then
-                        -------------------------------------------------------------------------------------------------------------// BOX & OUTLINE \\-------------------------------------------------------------------------------------------------------------
-
-                        BoxOutline.Size = Vector2.new(4 * scale, 5.6 * scale)
-                        BoxOutline.Position = Vector2.new(root_pos.X - BoxOutline.Size.X / 2, root_pos.Y - BoxOutline.Size.Y / 2)
-                        BoxOutline.Visible = getgenv().Outline
-
-                        Box.Size = Vector2.new(4 * scale, 5.6 * scale)
-                        Box.Position = Vector2.new(root_pos.X - Box.Size.X / 2, root_pos.Y - Box.Size.Y / 2)
-                        Box.Visible = getgenv().Boxes
-                        Box.Color = getgenv().ESP_Color
-                        Box.Filled = getgenv().BoxFilled
-                        Box.Transparency = getgenv().boxTransparency
-
-                        -------------------------------------------------------------------------------------------------------------// OFFSETS \\-------------------------------------------------------------------------------------------------------------
-
-                        local boxWidth = BoxOutline.Size.X -- width
-                        local boxHeight = BoxOutline.Size.Y -- height
-                        
-                        local boxCenterX = root_pos.X
-                        local boxCenterY = root_pos.Y - (boxHeight / 2)
-            
-                        local rightSide = (boxWidth / 2 + 12)
-
-                        local headCFrame = v.Character.Head.CFrame
-                        local viewVector = (headCFrame * CFrame.new(0, 0, - getgenv().lookV_length)).Position
-                        local viewViewport = dwcamera:WorldToViewportPoint(viewVector)
-
-                        -------------------------------------------------------------------------------------------------------------// NAME \\-------------------------------------------------------------------------------------------------------------
-
-                        local isStaff = isstaff(v)
-                        Name.Position = Vector2.new(root_pos.X, root_pos.Y - BoxOutline.Size.Y / 2 - 15)
-                        Name.Text = isStaff and "[STAFF]: "..v.DisplayName or v.DisplayName
-                        Name.Visible = getgenv().Name
-                        Name.Color = getgenv().Name_Color
-
-                        -------------------------------------------------------------------------------------------------------------// TOOL \\-------------------------------------------------------------------------------------------------------------
-
-                        local tool = getchartool(v.Character)
-
-                        Weapon.Position = Vector2.new(root_pos.X, root_pos.Y + BoxOutline.Size.Y / 2)
-                        Weapon.Text = " " .. tostring(tool) .. " "
-                        Weapon.Visible = getgenv().Weapon
-                        Weapon.Color = getgenv().Weapon_Color
-
-                        -------------------------------------------------------------------------------------------------------------// DISTANCE \\-------------------------------------------------------------------------------------------------------------
-
-                        local distance = getDist(dwEntity.Character, v)
-
-                        Distance.Position = Vector2.new(Weapon.Position.X, Weapon.Position.Y + 15)
-                        local distance = getDist(dwEntity.Character, v)
-                        Distance.Position = Vector2.new(Weapon.Position.X, Weapon.Position.Y + 15)
-                        if distance then
-                            Distance.Text = " " .. tostring(math.round(distance)) .. " "
-                        else
-                            Distance.Text = " "
+            Connection = Euphoria.RunService.RenderStepped:Connect(function()
+                if plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+                    local HRP = plr.Character.HumanoidRootPart
+                    local Humanoid = plr.Character:WaitForChild("Humanoid");
+                    local Pos, OnScreen = Cam:WorldToScreenPoint(HRP.Position)
+                    local Dist = (Cam.CFrame.Position - HRP.Position).Magnitude / 3.5714285714
+                    if OnScreen and Dist <= ESP.MaxDistance then
+                        local Size = HRP.Size.Y
+                        local defaultFOV = 60
+                        local currentFOV = workspace.CurrentCamera.FieldOfView
+                        local fovFactor = defaultFOV / currentFOV
+                        local scaleFactor = ((Size * Cam.ViewportSize.Y) / (Pos.Z * 2)) * fovFactor
+                        local w, h = 3 * scaleFactor, 4.5 * scaleFactor
+                        if ESP.FadeOut.OnDistance then
+                            Functions:FadeOutOnDist(Box, Dist)
+                            Functions:FadeOutOnDist(Outline, Dist)
+                            Functions:FadeOutOnDist(Name, Dist)
+                            Functions:FadeOutOnDist(Distance, Dist)
+                            Functions:FadeOutOnDist(Weapon, Dist)
+                            Functions:FadeOutOnDist(Healthbar, Dist)
+                            Functions:FadeOutOnDist(BehindHealthbar, Dist)
+                            Functions:FadeOutOnDist(HealthText, Dist)
+                            Functions:FadeOutOnDist(WeaponIcon, Dist)
+                            Functions:FadeOutOnDist(LeftTop, Dist)
+                            Functions:FadeOutOnDist(LeftSide, Dist)
+                            Functions:FadeOutOnDist(BottomSide, Dist)
+                            Functions:FadeOutOnDist(BottomDown, Dist)
+                            Functions:FadeOutOnDist(RightTop, Dist)
+                            Functions:FadeOutOnDist(RightSide, Dist)
+                            Functions:FadeOutOnDist(BottomRightSide, Dist)
+                            Functions:FadeOutOnDist(BottomRightDown, Dist)
+                            Functions:FadeOutOnDist(Flag1, Dist)
+                            Functions:FadeOutOnDist(Flag2, Dist)
                         end
-                        Distance.Visible = getgenv().Distance
-                        Distance.Color = getgenv().Distance_Color
-                        Distance.Visible = getgenv().Distance
-                        Distance.Color = getgenv().Distance_Color
-
-                        -------------------------------------------------------------------------------------------------------------// HEALTH \\-------------------------------------------------------------------------------------------------------------
-
-                        local headPosition = v.Character.Head.Position
-                        local headViewport = dwcamera:WorldToViewportPoint(headPosition)
-                        local healthVal = v.Character.Humanoid.Health
-
-                        local fullHP = Color3.new(0, 1, 0)
-                        local emptyHP = Color3.new(1, 0, 0)
-
-                        local interpfactor = 1 - (healthVal / 100)
-
-                        local currentColor = fullHP:Lerp(emptyHP, interpfactor)
-
-                        -------------------------------------------------------------------------------------------------------------// HEALTH BAR \\-------------------------------------------------------------------------------------------------------------
-                        
-                        healthbarOutline.Visible = getgenv().HealthbarOutline
-                        healthbarOutline.Size = Vector2.new(2, boxHeight)
-                        healthbarOutline.Position = BoxOutline.Position - Vector2.new(6,0)
-
-                        healthBar.Visible = getgenv().Healthbar
-                        local clampedHealthVal = math.clamp(healthVal, 0, 100)
-
-                        healthBar.Size = Vector2.new(2, boxHeight * (clampedHealthVal / 100))
-                        healthBar.Position = Vector2.new(healthbarOutline.Position.X, healthbarOutline.Position.Y + boxHeight - healthBar.Size.Y)
-                        healthBar.Color = currentColor
-
-                        -------------------------------------------------------------------------------------------------------------// HEALTH TEXT \\-------------------------------------------------------------------------------------------------------------
-
-                        Health.Position = Vector2.new(healthBar.Position.X - 10, healthBar.Position.Y)
-                        if healthVal then
-                            Health.Text = " " .. tostring(math.round(healthVal)) .. " "
+                        if ESP.TeamCheck and plr ~= lplayer and ((lplayer.Team ~= plr.Team and plr.Team) or (not lplayer.Team and not plr.Team)) and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") and plr.Character:FindFirstChild("Humanoid") then
+                            do
+                                LeftTop.Visible = ESP.Drawing.Boxes.Corner.Enabled
+                                LeftTop.Position = UDim2.new(0, Pos.X - w / 2, 0, Pos.Y - h / 2)
+                                LeftTop.Size = UDim2.new(0, w / 5, 0, 1)
+                                LeftSide.Visible = ESP.Drawing.Boxes.Corner.Enabled
+                                LeftSide.Position = UDim2.new(0, Pos.X - w / 2, 0, Pos.Y - h / 2)
+                                LeftSide.Size = UDim2.new(0, 1, 0, h / 5)
+                                BottomSide.Visible = ESP.Drawing.Boxes.Corner.Enabled
+                                BottomSide.Position = UDim2.new(0, Pos.X - w / 2, 0, Pos.Y + h / 2)
+                                BottomSide.Size = UDim2.new(0, 1, 0, h / 5)
+                                BottomSide.AnchorPoint = Vector2.new(0, 5)
+                                BottomDown.Visible = ESP.Drawing.Boxes.Corner.Enabled
+                                BottomDown.Position = UDim2.new(0, Pos.X - w / 2, 0, Pos.Y + h / 2)
+                                BottomDown.Size = UDim2.new(0, w / 5, 0, 1)
+                                BottomDown.AnchorPoint = Vector2.new(0, 1)
+                                RightTop.Visible = ESP.Drawing.Boxes.Corner.Enabled
+                                RightTop.Position = UDim2.new(0, Pos.X + w / 2, 0, Pos.Y - h / 2)
+                                RightTop.Size = UDim2.new(0, w / 5, 0, 1)
+                                RightTop.AnchorPoint = Vector2.new(1, 0)
+                                RightSide.Visible = ESP.Drawing.Boxes.Corner.Enabled
+                                RightSide.Position = UDim2.new(0, Pos.X + w / 2 - 1, 0, Pos.Y - h / 2)
+                                RightSide.Size = UDim2.new(0, 1, 0, h / 5)
+                                RightSide.AnchorPoint = Vector2.new(0, 0)
+                                BottomRightSide.Visible = ESP.Drawing.Boxes.Corner.Enabled
+                                BottomRightSide.Position = UDim2.new(0, Pos.X + w / 2, 0, Pos.Y + h / 2)
+                                BottomRightSide.Size = UDim2.new(0, 1, 0, h / 5)
+                                BottomRightSide.AnchorPoint = Vector2.new(1, 1)
+                                BottomRightDown.Visible = ESP.Drawing.Boxes.Corner.Enabled
+                                BottomRightDown.Position = UDim2.new(0, Pos.X + w / 2, 0, Pos.Y + h / 2)
+                                BottomRightDown.Size = UDim2.new(0, w / 5, 0, 1)
+                                BottomRightDown.AnchorPoint = Vector2.new(1, 1)                                                            
+                            end
+                            do
+                                Box.Position = UDim2.new(0, Pos.X - w / 2, 0, Pos.Y - h / 2)
+                                Box.Size = UDim2.new(0, w, 0, h)
+                                Box.Visible = ESP.Drawing.Boxes.Full.Enabled;
+                                if ESP.Drawing.Boxes.Filled.Enabled then
+                                    Box.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                                    if ESP.Drawing.Boxes.GradientFill then
+                                        Box.BackgroundTransparency = ESP.Drawing.Boxes.Filled.Transparency;
+                                    else
+                                        Box.BackgroundTransparency = 1
+                                    end
+                                    Box.BorderSizePixel = 1
+                                else
+                                    Box.BackgroundTransparency = 1
+                                end
+                                RotationAngle = RotationAngle + (tick() - Tick) * ESP.Drawing.Boxes.RotationSpeed * math.cos(math.pi / 4 * tick() - math.pi / 2)
+                                if ESP.Drawing.Boxes.Animate then
+                                    Gradient1.Rotation = RotationAngle
+                                    Gradient2.Rotation = RotationAngle
+                                else
+                                    Gradient1.Rotation = -45
+                                    Gradient2.Rotation = -45
+                                end
+                                Tick = tick()
+                            end
+                            do  
+                                local health = Humanoid.Health / Humanoid.MaxHealth;
+                                Healthbar.Visible = ESP.Drawing.Healthbar.Enabled;
+                                Healthbar.Position = UDim2.new(0, Pos.X - w / 2 - 6, 0, Pos.Y - h / 2 + h * (1 - health))  
+                                Healthbar.Size = UDim2.new(0, ESP.Drawing.Healthbar.Width, 0, h * health)  
+                                BehindHealthbar.Visible = ESP.Drawing.Healthbar.Enabled;
+                                BehindHealthbar.Position = UDim2.new(0, Pos.X - w / 2 - 6, 0, Pos.Y - h / 2)  
+                                BehindHealthbar.Size = UDim2.new(0, ESP.Drawing.Healthbar.Width, 0, h)
+                                do
+                                    if ESP.Drawing.Healthbar.HealthText then
+                                        local healthPercentage = math.floor(Humanoid.Health / Humanoid.MaxHealth * 100)
+                                        HealthText.Position = UDim2.new(0, Pos.X - w / 2 - 6, 0, Pos.Y - h / 2 + h * (1 - healthPercentage / 100) + 3)
+                                        HealthText.Text = tostring(healthPercentage)
+                                        HealthText.Visible = Humanoid.Health < Humanoid.MaxHealth
+                                        if ESP.Drawing.Healthbar.Lerp then
+                                            local color = health >= 0.75 and Color3.fromRGB(0, 255, 0) or health >= 0.5 and Color3.fromRGB(255, 255, 0) or health >= 0.25 and Color3.fromRGB(255, 170, 0) or Color3.fromRGB(255, 0, 0)
+                                            HealthText.TextColor3 = color
+                                        else
+                                            HealthText.TextColor3 = ESP.Drawing.Healthbar.HealthTextRGB
+                                        end
+                                    end                        
+                                end
+                            end
+                            do
+                                Name.Visible = ESP.Drawing.Names.Enabled and getgenv().plrName
+                                Name.Text = plr.Name
+                                Name.Position = UDim2.new(0, Pos.X, 0, Pos.Y - h / 2 - 9)
+                            end
+                            do
+                                if ESP.Drawing.Distances.Enabled and getgenv().distance then
+                                    if ESP.Drawing.Distances.Position == "Bottom" then
+                                        Weapon.Position = UDim2.new(0, Pos.X, 0, Pos.Y + h / 2 + 18)
+                                        WeaponIcon.Position = UDim2.new(0, Pos.X - 21, 0, Pos.Y + h / 2 + 15)
+                                        Distance.Position = UDim2.new(0, Pos.X, 0, Pos.Y + h / 2 + 33)
+                                        Distance.Text = tostring(math.floor(Dist))
+                                        Distance.Visible = true
+                                    elseif ESP.Drawing.Distances.Position == "Text" then
+                                        Weapon.Position = UDim2.new(0, Pos.X, 0, Pos.Y + h / 2 + 8)
+                                        WeaponIcon.Position = UDim2.new(0, Pos.X - 21, 0, Pos.Y + h / 2 + 5)
+                                        Distance.Position = UDim2.new(0, Pos.X, 0, Pos.Y + h / 2 + 23)
+                                        Distance.Visible = true
+                                        Distance.Text = tostring(math.floor(Dist))
+                                        Name.Visible = ESP.Drawing.Names.Enabled and getgenv().plrName
+                                    end
+                                end
+                            end
+                            do
+                                Weapon.Text = "none"
+                                Weapon.Visible = ESP.Drawing.Weapons.Enabled and getgenv().weapon
+                            end                            
                         else
-                            Health.Text = " "
-                        end
-                        Health.Visible = getgenv().Health
-                        Health.Color = currentColor
-
-                        -------------------------------------------------------------------------------------------------------------// LOOK VECTOR \\-------------------------------------------------------------------------------------------------------------
-
-                        lookV.Visible = getgenv().lookV
-                        lookV.From = Vector2.new(headViewport.X, headViewport.Y)
-                        lookV.To = Vector2.new(viewViewport.X, viewViewport.Y)
-                        lookV.Color = getgenv().lookV_Color
-
-                        -------------------------------------------------------------------------------------------------------------// HEAD DOT \\-------------------------------------------------------------------------------------------------------------
-
-                        headDot.Visible = getgenv().headDot
-                        headDot.Position = Vector2.new(headViewport.X, headViewport.Y)
-                        headDot.Color = getgenv().headDot_Color
-
-                        -------------------------------------------------------------------------------------------------------------// VISIBLE CHECK \\-------------------------------------------------------------------------------------------------------------
-                        local isplrVis = isvisible(v)
-                        
-                        if isplrVis then
-                            visCheck.Visible = getgenv().visCheck
-                            visCheck.Position = Vector2.new(boxCenterX + rightSide, boxCenterY)
-                            visCheck.Color = Color3.new(0, 1, 0)
-                            headDot.Visible = getgenv().headDot
-                            headDot.Color = Color3.new(1, 0.768627, 0)
-                            visCheck.Text = " VIS "
-                        else
-                            visCheck.Text = "  "
-                            headDot.Visible = false
-                            visCheck.Position = Vector2.new(boxCenterX + rightSide, boxCenterY)
-                            visCheck.Color = Color3.new(255, 0, 0)
-                            headDot.Color = Color3.new(1, 1, 1)
-                        end
-
-                        -------------------------------------------------------------------------------------------------------------// STAFF CHECK \\-------------------------------------------------------------------------------------------------------------
-
-                        local isStaffCall, role = isstaff(v)
-
-                        local offset2 = 10
-
-                        if isStaffCall then
-                            staffCheck.Visible = isStaffCall
-                            staffCheck.Position = Vector2.new(boxCenterX + rightSide + 15, boxCenterY + offset2)
-                            staffCheck.Text = ' [ STAFF ]: '
-                            staffCheck.Color = Color3.new(0.690196, 0.8, 1)
+                            HideESP();
                         end
                     else
-                        Box.Visible = false
-                        BoxOutline.Visible = false
-                        Name.Visible = false
-                        Weapon.Visible = false
-                        Distance.Visible = false
-                        Health.Visible = false
-                        lookV.Visible = false
-                        visCheck.Visible = false
-                        headDot.Visible = false
-                        healthbarOutline.Visible = false
-                        healthBar.Visible = false
+                        HideESP();
                     end
                 else
-                    Box.Visible = false
-                    BoxOutline.Visible = false
-                    Name.Visible = false
-                    Weapon.Visible = false
-                    Distance.Visible = false
-                    Health.Visible = false
-                    lookV.Visible = false
-                    visCheck.Visible = false
-                    headDot.Visible = false
-                    healthbarOutline.Visible = false
-                    healthBar.Visible = false
+                    HideESP();
                 end
-            end
-        )
+            end)
+        end
+        coroutine.wrap(Updater)();
     end
-    coroutine.wrap(boxesp)()
-end)
+    do
+        for _, v in pairs(game:GetService("Players"):GetPlayers()) do
+            if v.Name ~= lplayer.Name then
+                coroutine.wrap(ESP)(v)
+            end      
+        end
+        game:GetService("Players").PlayerAdded:Connect(function(v)
+            coroutine.wrap(ESP)(v)
+        end);
+    end;
+end;
+while true do
+    ESP.Drawing.Names.Enabled = getgenv().plrName
+    ESP.Drawing.Distances.Enabled = getgenv().distance
+    ESP.Drawing.Weapons.Enabled = getgenv().weapon
+    ESP.Drawing.Healthbar.Enabled = getgenv().healthbar
+    wait(0.1)
+end
