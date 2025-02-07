@@ -31,7 +31,7 @@ function getchartool(Character)
             return v.Name
         end
     end
-    return "nothing"
+    return "hands"
 end
 
 local function getDist(Character, v)
