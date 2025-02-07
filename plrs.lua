@@ -1,4 +1,5 @@
 local Workspace, RunService, Players, CoreGui, Lighting = cloneref(game:GetService("Workspace")), cloneref(game:GetService("RunService")), cloneref(game:GetService("Players")), game:GetService("CoreGui"), cloneref(game:GetService("Lighting"))
+pcall(function()
 local ESP = {
     Enabled = true,
     TeamCheck = true,
@@ -355,3 +356,4 @@ while true do
     ESP.Drawing.Healthbar.Enabled = getgenv().healthbar
     wait(0.1)
 end
+end)
