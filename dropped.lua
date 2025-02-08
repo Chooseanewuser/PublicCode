@@ -1,5 +1,6 @@
 getgenv().DroppedItems = getgenv().DroppedItems or false
 getgenv().DroppedItemsColour = getgenv().DroppedItemsColour or Color3.fromRGB(255, 255, 255)
+getgenv().DroppedItemsDistance = getgenv().DroppedItemsDistance or 1000
 
 if not game:IsLoaded() then
     game.Loaded:Wait()
@@ -65,14 +66,20 @@ game:GetService("RunService").RenderStepped:Connect(function()
             continue
         end
 
+        local dropPos = drop:GetPivot().Position
+        local distance = (hrp.Position - dropPos).Magnitude
+        if distance > getgenv().DroppedItemsDistance then
+            if dropsCache[drop] then
+                dropsCache[drop].Visible = false
+            end
+            continue
+        end
+
         if not dropsCache[drop] then
             drawESP(drop)
         end
 
-        local dropPos = drop:GetPivot().Position
-        local distance = (hrp.Position - dropPos).Magnitude
         local screenPos, onScreen = workspace.CurrentCamera:WorldToViewportPoint(dropPos)
-
         local label = dropsCache[drop]
         if onScreen then
             label.Position = Vector2.new(screenPos.X, screenPos.Y)
@@ -92,6 +99,8 @@ game:GetService("RunService").RenderStepped:Connect(function()
 end)
 
 local oldDroppedItemsColour = getgenv().DroppedItemsColour
+local oldDroppedItemsDistance = getgenv().DroppedItemsDistance
+
 game:GetService("RunService").Heartbeat:Connect(function()
     if getgenv().DroppedItemsColour ~= oldDroppedItemsColour then
         oldDroppedItemsColour = getgenv().DroppedItemsColour
@@ -101,5 +110,10 @@ game:GetService("RunService").Heartbeat:Connect(function()
                 drawESP(drop)
             end
         end
+    end
+
+    if getgenv().DroppedItemsDistance ~= oldDroppedItemsDistance then
+        oldDroppedItemsDistance = getgenv().DroppedItemsDistance
+        clearCache()
     end
 end)
