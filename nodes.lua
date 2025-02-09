@@ -1,10 +1,5 @@
-getgenv().MetalNode = getgenv().MetalNode or false
-getgenv().StoneNode = getgenv().StoneNode or false
-getgenv().PhosphateNode = getgenv().PhosphateNode or false
-
-getgenv().MetalColour = getgenv().MetalColour or Color3.fromRGB(139, 69, 19)
-getgenv().StoneColour = getgenv().StoneColour or Color3.fromRGB(255, 255, 255)
-getgenv().PhosphateColour = getgenv().PhosphateColour or Color3.fromRGB(255, 255, 0)
+getgenv().NodeDistance = getgenv().NodeDistance or 10000
+getgenv().Nodes = getgenv().Nodes or "None"
 
 if not game:IsLoaded() then
     game.Loaded:Wait()
@@ -37,15 +32,7 @@ local function clearCache()
 end
 
 local function getNodeColor(nodeName)
-    if nodeName == "Metal_Node" and getgenv().MetalNode then
-        return getgenv().MetalColour
-    elseif nodeName == "Phosphate_Node" and getgenv().PhosphateNode then
-        return getgenv().PhosphateColour
-    elseif nodeName == "Stone_Node" and getgenv().StoneNode then
-        return getgenv().StoneColour
-    else
-        return nil
-    end
+    return Color3.fromRGB(255, 255, 255)
 end
 
 local function getNodeName(nodeName)
@@ -99,13 +86,20 @@ game:GetService("RunService").RenderStepped:Connect(function()
             local distance = (hrp.Position - nodePos).Magnitude
             local screenPos, onScreen = workspace.CurrentCamera:WorldToViewportPoint(nodePos)
 
-            local label = nodeCache[node]
-            if onScreen then
-                label.Position = Vector2.new(screenPos.X, screenPos.Y)
-                label.Text = string.format("%s\n%.0fm", getNodeName(node.Name), distance)
-                label.Visible = true
+            if distance <= getgenv().NodeDistance then
+                local label = nodeCache[node]
+                if onScreen then
+                    label.Position = Vector2.new(screenPos.X, screenPos.Y)
+                    label.Text = string.format("%s\n%.0fm", getNodeName(node.Name), distance)
+                    label.Visible = true
+                else
+                    label.Visible = false
+                end
             else
-                label.Visible = false
+                if nodeCache[node] then
+                    nodeCache[node]:Remove()
+                    nodeCache[node] = nil
+                end
             end
         else
             if nodeCache[node] then
@@ -123,14 +117,10 @@ game:GetService("RunService").RenderStepped:Connect(function()
     end
 end)
 
-local oldMetalColour = getgenv().MetalColour
-local oldStoneColour = getgenv().StoneColour
-local oldPhosphateColour = getgenv().PhosphateColour
+local oldNodeDistance = getgenv().NodeDistance
 game:GetService("RunService").Heartbeat:Connect(function()
-    if getgenv().MetalColour ~= oldMetalColour or getgenv().StoneColour ~= oldStoneColour or getgenv().PhosphateColour ~= oldPhosphateColour then
-        oldMetalColour = getgenv().MetalColour
-        oldStoneColour = getgenv().StoneColour
-        oldPhosphateColour = getgenv().PhosphateColour
+    if getgenv().NodeDistance ~= oldNodeDistance then
+        oldNodeDistance = getgenv().NodeDistance
         clearCache()
         for _, node in ipairs(nodeFolder:GetChildren()) do
             if node:IsA("Model") then
