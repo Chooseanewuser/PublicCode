@@ -37,20 +37,25 @@ pcall(function()
             if folder:IsA("Folder") then
                 for _, model in ipairs(folder:GetChildren()) do
                     if model:IsA("Model") and model:FindFirstChild("Humanoid") and model.Name == "Soldier" then
-                        if not soldierCache[model] then
-                            drawESP(model)
-                        end
                         local humanoid = model:FindFirstChild("Humanoid")
-                        local health = humanoid and math.floor(humanoid.Health) or 0
-                        local soldierPos = model:GetPivot().Position
-                        local screenPos, onScreen = workspace.CurrentCamera:WorldToViewportPoint(soldierPos)
-                        local label = soldierCache[model]
-                        label.Text = "NPC\n" .. health .. " HP"
-                        if onScreen then
-                            label.Position = Vector2.new(screenPos.X, screenPos.Y)
-                            label.Visible = true
-                        else
-                            label.Visible = false
+                        if humanoid and humanoid.Health > 0 then
+                            if not soldierCache[model] then
+                                drawESP(model)
+                            end
+                            local health = math.floor(humanoid.Health)
+                            local soldierPos = model:GetPivot().Position
+                            local screenPos, onScreen = workspace.CurrentCamera:WorldToViewportPoint(soldierPos)
+                            local label = soldierCache[model]
+                            label.Text = "NPC\n" .. health .. " HP"
+                            if onScreen then
+                                label.Position = Vector2.new(screenPos.X, screenPos.Y)
+                                label.Visible = true
+                            else
+                                label.Visible = false
+                            end
+                        elseif soldierCache[model] then
+                            soldierCache[model]:Remove()
+                            soldierCache[model] = nil
                         end
                     end
                 end
@@ -58,7 +63,7 @@ pcall(function()
         end
         
         for soldierModel, label in pairs(soldierCache) do
-            if soldierModel.Parent == nil then
+            if soldierModel.Parent == nil or (soldierModel:FindFirstChild("Humanoid") and soldierModel.Humanoid.Health <= 0) then
                 label:Remove()
                 soldierCache[soldierModel] = nil
             end
