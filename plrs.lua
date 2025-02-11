@@ -132,8 +132,8 @@ do
         Name = "ESPHolder",
     });
     local DupeCheck = function(plr)
-        if ScreenGui:FindFirstChild(plr.Name) then
-            ScreenGui[plr.Name]:Destroy()
+        if ScreenGui:FindFirstChild(plr.DisplayName) then
+            ScreenGui[plr.DisplayName]:Destroy()
         end
     end
     local ESP = function(plr)
@@ -304,7 +304,7 @@ do
                             end
                             do
                                 Name.Visible = ESP.Drawing.Names.Enabled and getgenv().plrName
-                                Name.Text = plr.Name
+                                Name.Text = plr.DisplayName
                                 Name.Position = UDim2.new(0, Pos.X, 0, Pos.Y - h / 2 - 9)
                             end
                             do
