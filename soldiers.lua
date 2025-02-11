@@ -1,4 +1,4 @@
-getgenv().SoldierESP = true
+getgenv().SoldierESP = getgenv().SoldierESP or false
 getgenv().SoldierColour = getgenv().SoldierColour or Color3.fromRGB(0, 80, 199)
 if not game:IsLoaded() then
     game.Loaded:Wait()
