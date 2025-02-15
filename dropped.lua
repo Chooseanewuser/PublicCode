@@ -1,6 +1,6 @@
 getgenv().DroppedItems = getgenv().DroppedItems or false
 getgenv().DroppedItemsColour = getgenv().DroppedItemsColour or Color3.fromRGB(255, 255, 255)
-getgenv().DroppedItemsDistance = getgenv().DroppedItemsDistance or 1000
+getgenv().DroppedItemsDistance = 2500
 
 if not game:IsLoaded() then
     game.Loaded:Wait()
