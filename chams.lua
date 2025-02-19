@@ -1,7 +1,5 @@
-task.spawn(function()
     local lplr, camera, highlights = game.Players.LocalPlayer, workspace.CurrentCamera, {}
     getgenv().Chams = getgenv().Chams or false
-    local vfx, plants, rayparts, vegetation = workspace:FindFirstChild("VFX"), workspace:FindFirstChild("Plants"), workspace:FindFirstChild("RayParts"), workspace:FindFirstChild("Vegetation")
     
     local function is_within_range(player)
         if not lplr.Character or not player.Character then return false end
@@ -56,4 +54,3 @@ task.spawn(function()
             end
         end
     end)
-end)
